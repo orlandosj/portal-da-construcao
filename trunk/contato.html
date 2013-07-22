@@ -246,12 +246,21 @@
 									<label for="telefone">Telefone:</label>
 									<input class="inputcadastro" type="text" size="25" name="telefone" id="telefone" value="" tabindex="3" />
 									<span class="hint">Informe um número de telefone para contato</span><br /><br />
-																
+
+									<label for="assunto">Assunto:</label>
+									<select required aria-required="true" class="dropdownlist" name="assunto" id="assunto" tabindex="4"> 
+											<option selected value="">Selecione o assunto</option>
+											<option value="duvidas">Dúvidas</option>
+											<option value="sugestoes">Sugestões</option>
+											<option value="reclamacoes">Reclamações</option>											
+									</select>
+									<span class="hint">Selecione o assunto a tratar conosco</span><br /><br />
+									
 									<label for="comment">Mensagem:</label>
-									<textarea cols="50" rows="6" name="comment" id="comment" class="inputtextarea" tabindex="4"></textarea>
+									<textarea cols="50" rows="6" name="comment" id="comment" class="inputtextarea" tabindex="5" required></textarea>
 									<span class="hint">Digite a sua mensagem. Em breve entraremos em contato</span><br /><br />
 									<label>
-										<input class="button"  type="submit" name="submit" id="button" value="Enviar" tabindex="5" />
+										<input class="button"  type="submit" name="submit" id="button" value="Enviar" tabindex="6" />
 										<a rel="nofollow" id="cancel-comment-reply-link" href="/2010/05/desarrollo-de-widgets/#respond" style="display:none;">Click here to cancel reply.</a>  
 									</label>
 													
