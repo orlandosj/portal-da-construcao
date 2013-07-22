@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
+<head profile="http://gmpg.org/xfn/11">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Criando um flip book com JQuery (www.rafaelwendel.com)</title>
+<script type="text/javascript" src="jquery.js" ></script>
+<script type="text/javascript" src="turn.min.js" ></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	
+
+	
+	
+
+	// Define a página que vai ser aberta, quando usuario clickar.
+	
+	var pagina = "teste.html";	
+	$('#conteudo').load(pagina);
+	
+	
+    $('#magazine').turn();
+	
+});
+</script>
+<style type="text/css">
+    #magazine{
+        width: 800px;
+        height: 533px;
+    }
+    
+    #magazine .turn-page{
+        width: 400px;
+        height: 533px;
+        background-color: #ccc;
+    }
+</style>
+</head>
+<body>
+	
+    <div id="magazine">
+        <div><img src="img/imagem1.jpg" /></div>
+        <div><img src="img/imagem2.jpg" />		</div>
+        <div><img src="img/imagem3.jpg" /></div>
+        <div><img src="img/imagem4.jpg" /></div>
+    </div>
+</body>
+</html>
