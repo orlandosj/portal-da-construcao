@@ -235,34 +235,21 @@
 						<div id="contactFormArea">
 							<form action="# method="post" id="cForm">
 								<fieldset>
-									<div class="fields-form clearfix">
-										<div class="form-input">
-											<label for="author">Nome:</label>
-											<input class="input input-help" type="text" size="25" name="author" id="author" value="" tabindex="1" aria-required='true' /><br /><br />
-											<label for="email">Email:</label>
-											<input class="input input-help" type="text" size="25" name="email" id="email" value="" tabindex="2" aria-required='true' /><br /><br />
-											<label for="telefone">Telefone:</label>
-											<input class="input input-help" type="text" size="25" name="telefone" id="telefone" value="" tabindex="3" />
-										</div>
-										<div class="form-help help-author hidden">
-											<p>Informe seu nome completo.</p>
-										</div>
-										<div class="form-help help-email hidden">
-											<p>Informe um email válido para que possamos entrar em contato. Este email não será compartilhado com ninguém.</p>
-										</div>
-										<div class="form-help help-telefone hidden">
-											<p>Informe um número de telefone para contato, com DDD. Digite apenas números</p>
-										</div>
-										<div class="form-help help-comment hidden">
-											<p>Digite a sua mensagem. Em breve entraremos em contato.</p>
-										</div>
-									</div>
-								
-								
-							<!--<p><small><strong>XHTML:</strong> You can use these tags: <code>&lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; </code></small></p>-->
-
+									<label for="author">Nome:</label>
+									<input class="inputcadastro" type="text" size="25" name="author" id="author" value="" tabindex="1" aria-required='true' />
+									<span class="hint">Informe seu nome completo</span><br /><br />
+									
+									<label for="email">Email:</label>
+									<input class="inputcadastro" type="text" size="25" name="email" id="email" value="" tabindex="2" aria-required='true' />
+									<span class="hint">Informe um email válido para que possamos entrar em contato. Este email não será compartilhado com ninguém.</span><br /><br />
+									
+									<label for="telefone">Telefone:</label>
+									<input class="inputcadastro" type="text" size="25" name="telefone" id="telefone" value="" tabindex="3" />
+									<span class="hint">Informe um número de telefone para contato</span><br /><br />
+																
 									<label for="comment">Mensagem:</label>
-									<textarea cols="50" rows="5" name="comment" id="comment" class="textarea input-help" tabindex="4"></textarea><br /><br />
+									<textarea cols="50" rows="6" name="comment" id="comment" class="inputtextarea" tabindex="4"></textarea>
+									<span class="hint">Digite a sua mensagem. Em breve entraremos em contato</span><br /><br />
 									<label>
 										<input class="button"  type="submit" name="submit" id="button" value="Enviar" tabindex="5" />
 										<a rel="nofollow" id="cancel-comment-reply-link" href="/2010/05/desarrollo-de-widgets/#respond" style="display:none;">Click here to cancel reply.</a>  
