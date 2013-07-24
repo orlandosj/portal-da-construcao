@@ -517,8 +517,8 @@ input.text{ width:290px;font:12px/12px 'courier new',courier,monospace;color:#33
 	font-size:20px;
 	color:#0E0E0E;
 	text-align: center;
-	line-height:130%;
-	text-decoration: blink;
+	line-height:110%;
+	/*text-decoration: blink;*/
 }
 
 .dica {
@@ -567,6 +567,24 @@ input.text{ width:290px;font:12px/12px 'courier new',courier,monospace;color:#33
 	text-align: justify;
 	line-height:150%;
 }
+
+.site-pagination {text-align:center;}
+.site-pagination a,
+.site-pagination span {
+    display:inline-block;
+    background-color: #c1dfda;
+    border: 1px solid #82bfb5;
+    padding:6px 10px;
+    text-decoration:none;
+    color:#067f6c;
+    margin:0 5px;
+}
+.site-pagination a:hover,
+.site-pagination .active {
+    background-color: #449f91;
+    color:#fff;
+}
+
 
 
 /*** END MODAL ***/

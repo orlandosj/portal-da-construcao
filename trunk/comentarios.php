@@ -1,9 +1,13 @@
-<html xmlns="http://www.w3.org/1999/xhtml"><head>
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
 
-	<title>Portal da Construção</title>
-	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-	
-	<link media="screen" type="text/css" href="css/style.css" rel="stylesheet">
+		<title>Comentários</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+		
+		<link media="screen" type="text/css" href="css/style.css" rel="stylesheet">
 
 	
 	<script id="twitter-wjs" src="http://platform.twitter.com/widgets.js"></script>
@@ -12,6 +16,9 @@
 	<script src="scripts/jquery.lavalamp.min.js" type="text/javascript"></script>
 	<script src="scripts/js.js" type="text/javascript"></script>
 	<script src="scripts/jquery.cycle.all.js" type="text/javascript"></script>
+	
+	<script src="scripts/jquery.min.js" type="text/javascript"></script>
+	<script src="scripts/jquery.maskedinput.js" type="text/javascript"></script>
 	
 	<link rel="stylesheet" href="scripts/coin-slider-styles.css" type="text/css" />
 	
@@ -22,6 +29,13 @@
 			pause: 1,
 		});
 	});
+	</script>
+	
+	<script type="text/javascript">  
+		jQuery.noConflict(); 
+		jQuery(function($){ 
+			$("#telefone").mask("(99) 9999-9999");
+		}); 
 	</script>
 	
 	<script type="text/javascript">
@@ -72,6 +86,33 @@
 	</script>
 	
 	<script charset="utf-8" src="scripts/slider.js" type="text/javascript"></script>
+
+<?php
+/*Página para CRUD de comentários*/
+require_once "conexao.php";
+	
+	$nome = $_POST["author"];
+	$email = $_POST["email"];
+	$telefone = $_POST["telefone"];
+	$comentario = $_POST["comment"];
+	$data =  date('Y-m-d H:i:s');
+	
+	function cadComentario($nome, $email, $telefone, $comentario, $data){
+		conectar();
+	
+		$consulta = "INSERT INTO comentarios (nome_usuario, email_usuario, telefone_usuario, comentario, data)
+					 VALUES ('$nome', '$email', '$telefone', '$comentario', '$data')";
+		$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução!\");</script>");	
+		
+		echo "<script>alert('Comentário feito com sucesso! Antes de ser publicado no portal ele será verificado!')</script>";
+		
+	
+	}
+
+	if(isset($_POST["comentar"])){
+		cadComentario($nome, $email, $telefone, $comentario, $data);		
+	}	
+?>
 
 <body class="home blog" data-twttr-rendered="true">
 
@@ -170,8 +211,8 @@
   </div> 
   
 <!-- END OF SLIDES CONTAINER -->
-
-<!-- BEGIN CONTENT -->
+		
+	<!-- BEGIN CONTENT -->
 	<div class="clearfix" id="content">
 	<div id="padding_content">
 		<div class="clearfix" id="topcontent">
@@ -207,89 +248,49 @@
 					<p> 
 
 					</p>-->
+					<h2>Comentário</h2>
 					
-					<!--DICAS-->
-					<div class="anuncio" id="anuncio">
-						 <div class="box-02">
-							<a href="cadastro.html">
-							  <div class="box-anuncio" id="texto_anuncio">
-									<img src="images/cadastre-se2.jpg"><br></br>
-								   Não perca tempo!!! Anuncie seus serviços no Portal da Construção!!!<p></p>
-								   Você paga apenas R$20,00 por mês!!! É muito barato!!!<p></p>
-								   Clique aqui e faça seu cadastro agora mesmo!!!
-							  </div>							  
-							</a>
-						 </div>
+					<p></p>
+					
+					<div id="portal">
+						Diga qual é a sua opinição sobre o portal, comente sobre serviços realizados em seu imóvel, indique profissionais. 
+						Faça aqui o seu comentário.<br></br>
+						<p>*Obs: comentários ofensivos, com cunho racista, religioso ou sexual não serão exibidos no portal.</p> 
 					</div>
 					
-					<br></br>
+					<p></p>
 					
-					<h2>Dicas de especialistas</h2>
-					
-					<div class="dica" id="dica1">
-						 <div class="box-02">
-							  <div class="box-03" id="texto_dica_1">
-								   qualquer texto de qualquer altura gerado dinamicamente
-								   ou não, será centralizado verticalmente
-							  </div>
-						 </div>
+					<div id="respond">
+						<div id="contactFormArea">
+							<form action="comentarios.php" method="post" id="cForm">
+								<fieldset>
+									<label for="author">Nome:</label>
+									<input class="inputcadastro" type="text" size="25" name="author" id="author" value="" tabindex="1" required />
+									<span class="hint">Informe seu nome completo</span><br /><br />
+									
+									<label for="email">Email:</label>
+									<input class="inputcadastro" type="text" size="25" name="email" id="email" value="" tabindex="2" required/>
+									<span class="hint">Informe um email válido para que possamos entrar em contato. Este email não será compartilhado com ninguém.</span><br /><br />
+									
+									<label for="telefone">Telefone:</label>
+									<input class="inputcadastro" type="text" size="25" name="telefone" id="telefone" value="" tabindex="3" />
+									<span class="hint">Informe um número de telefone para contato (não obrigatório)</span><br /><br />
+
+									<label for="comment">Comentário:</label>
+									<textarea cols="50" rows="6" name="comment" id="comment" class="inputtextarea" tabindex="5" required></textarea>
+									<span class="hint">Digite seu comentário</span><br /><br />
+									<label>
+										<input class="button"  type="submit" name="comentar" id="button" value="Enviar" tabindex="6" />
+										<a rel="nofollow" id="cancel-comment-reply-link" href="/2010/05/desarrollo-de-widgets/#respond" style="display:none;">Click here to cancel reply.</a>  
+									</label>
+													
+									<input type='hidden' name='comment_post_ID' value='2374' id='comment_post_ID' />
+									<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+									<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="8d90ccd5ef" /></p>	
+								</fieldset>
+							</form>
+						</div>
 					</div>
-					<br></br>
-					<div class="dica" id="dica2">
-						 <div class="box-02">
-							  <div class="box-03" id="texto_dica_2">
-								   qualquer texto de qualquer altura gerado dinamicamente
-								   ou não, será centralizado verticalmente
-							  </div>
-						 </div>
-					</div>
-					<br></br>
-					
-					<h4><a href="#/">Veja outras dicas</a></h4>
-					
-					<p> 
-					
-					</p>
-					<p> 
-					
-					</p>
-					<!--END OF DICAS-->
-					
-					<!--COMENTÁRIOS-->
-					<h2>Comentários</h2>
-					<p> </p>
-					
-					<div class="comentario" id="comentario1">
-						 <div class="box-02">
-							  <div class="box-03" id="texto_comentario_1">
-								   qualquer texto de qualquer altura gerado dinamicamente
-								   ou não, será centralizado verticalmente
-							  </div>
-						 </div>
-					</div>
-					<br></br>
-					<div class="comentario" id="comentario2">
-						 <div class="box-02">
-							  <div class="box-03" id="texto_comentario_2">
-								   qualquer texto de qualquer altura gerado dinamicamente
-								   ou não, será centralizado verticalmente
-							  </div>
-						 </div>
-					</div>					
-					<br></br>
-					
-					<h4><a href="listacomentarios.php">Veja outros comentários</a></h4>
-					<h4><a href="comentarios.html">Clique aqui para fazer um comentário</a></h4>
-					
-					
-					<p> 
-
-					</p>
-					<!--END OF COMENTÁRIOS-->
-
-
-					
-
 				</div><!-- end of maintext -->
 			</div><!-- end of main -->
 						<div id="side">
@@ -364,3 +365,5 @@
 	<!-- END OF FOOTER -->
 	
 		</body></html>
+
+
