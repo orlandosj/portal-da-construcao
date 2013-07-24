@@ -1,9 +1,13 @@
-<html xmlns="http://www.w3.org/1999/xhtml"><head>
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
 
-	<title>Portal da Construção</title>
-	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-	
-	<link media="screen" type="text/css" href="css/style.css" rel="stylesheet">
+		<title>Comentários</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+		
+		<link media="screen" type="text/css" href="css/style.css" rel="stylesheet">
 
 	
 	<script id="twitter-wjs" src="http://platform.twitter.com/widgets.js"></script>
@@ -12,6 +16,9 @@
 	<script src="scripts/jquery.lavalamp.min.js" type="text/javascript"></script>
 	<script src="scripts/js.js" type="text/javascript"></script>
 	<script src="scripts/jquery.cycle.all.js" type="text/javascript"></script>
+	
+	<script src="scripts/jquery.min.js" type="text/javascript"></script>
+	<script src="scripts/jquery.maskedinput.js" type="text/javascript"></script>
 	
 	<link rel="stylesheet" href="scripts/coin-slider-styles.css" type="text/css" />
 	
@@ -22,6 +29,13 @@
 			pause: 1,
 		});
 	});
+	</script>
+	
+	<script type="text/javascript">  
+		jQuery.noConflict(); 
+		jQuery(function($){ 
+			$("#telefone").mask("(99) 9999-9999");
+		}); 
 	</script>
 	
 	<script type="text/javascript">
@@ -72,6 +86,41 @@
 	</script>
 	
 	<script charset="utf-8" src="scripts/slider.js" type="text/javascript"></script>
+
+<?php
+/*Página para CRUD de comentários*/
+require_once "conexao.php";
+	
+	conectar();
+		
+	$limite = 5; // Define o limite de registros a serem exibidos com o valor cinco
+	
+	// Captura os dados da variável 'pag' vindo da url, onde contém o número da página atual
+	$pagina = $_GET['pag'];
+	
+	/* Se a variável $pagina não contém nenhum valor,
+	então por padrão ela será posta com o valor 1 (primeira página) */
+	if(!$pagina)
+	{
+		$pagina = 1;
+	}
+	
+	/* Operação matemática que resulta no registro inicial
+	a ser selecionado no banco de dados baseado na página atual */
+	$inicio = ($pagina * $limite) - $limite;
+	
+	$consulta = "SELECT * FROM comentarios LIMIT $inicio,$limite";
+	
+	$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução da consulta!\");</script>");
+	
+	$consulta_total = mysql_query("SELECT id FROM comentarios"); // Seleciona o campo id da nossa tabela produtos
+	// Captura o número do total de registros no nosso banco a partir da nossa consulta
+	$total_registros = mysql_num_rows($consulta_total);
+	
+	/* Define o total de páginas a serem mostradas baseada
+	na divisão do total de registros pelo limite de registros a serem mostrados */
+	$total_paginas = Ceil($total_registros / $limite);
+?>
 
 <body class="home blog" data-twttr-rendered="true">
 
@@ -170,8 +219,8 @@
   </div> 
   
 <!-- END OF SLIDES CONTAINER -->
-
-<!-- BEGIN CONTENT -->
+		
+	<!-- BEGIN CONTENT -->
 	<div class="clearfix" id="content">
 	<div id="padding_content">
 		<div class="clearfix" id="topcontent">
@@ -207,89 +256,39 @@
 					<p> 
 
 					</p>-->
-					
-					<!--DICAS-->
-					<div class="anuncio" id="anuncio">
-						 <div class="box-02">
-							<a href="cadastro.html">
-							  <div class="box-anuncio" id="texto_anuncio">
-									<img src="images/cadastre-se2.jpg"><br></br>
-								   Não perca tempo!!! Anuncie seus serviços no Portal da Construção!!!<p></p>
-								   Você paga apenas R$20,00 por mês!!! É muito barato!!!<p></p>
-								   Clique aqui e faça seu cadastro agora mesmo!!!
-							  </div>							  
-							</a>
-						 </div>
-					</div>
-					
-					<br></br>
-					
-					<h2>Dicas de especialistas</h2>
-					
-					<div class="dica" id="dica1">
-						 <div class="box-02">
-							  <div class="box-03" id="texto_dica_1">
-								   qualquer texto de qualquer altura gerado dinamicamente
-								   ou não, será centralizado verticalmente
-							  </div>
-						 </div>
-					</div>
-					<br></br>
-					<div class="dica" id="dica2">
-						 <div class="box-02">
-							  <div class="box-03" id="texto_dica_2">
-								   qualquer texto de qualquer altura gerado dinamicamente
-								   ou não, será centralizado verticalmente
-							  </div>
-						 </div>
-					</div>
-					<br></br>
-					
-					<h4><a href="#/">Veja outras dicas</a></h4>
-					
-					<p> 
-					
-					</p>
-					<p> 
-					
-					</p>
-					<!--END OF DICAS-->
-					
-					<!--COMENTÁRIOS-->
 					<h2>Comentários</h2>
-					<p> </p>
 					
-					<div class="comentario" id="comentario1">
-						 <div class="box-02">
+					<p></p>
+					
+					<?php while($linha = mysql_fetch_assoc($resultado)):
+						$nome = $linha['nome_usuario'];
+						$email = $linha['email_usuario'];
+						$comentario = $linha['comentario'];						
+					?>
+						<div class="comentario" id="comentario1">
+							<div class="box-02">
 							  <div class="box-03" id="texto_comentario_1">
-								   qualquer texto de qualquer altura gerado dinamicamente
-								   ou não, será centralizado verticalmente
+								<?php echo $nome;?> <br></br> 
+								<?php echo $comentario;?> <br></br>
 							  </div>
-						 </div>
-					</div>
-					<br></br>
-					<div class="comentario" id="comentario2">
-						 <div class="box-02">
-							  <div class="box-03" id="texto_comentario_2">
-								   qualquer texto de qualquer altura gerado dinamicamente
-								   ou não, será centralizado verticalmente
-							  </div>
-						 </div>
-					</div>					
-					<br></br>
+							</div>
+						</div><br></br>
+					<?php endwhile;?>
 					
-					<h4><a href="listacomentarios.php">Veja outros comentários</a></h4>
+					<nav class="site-pagination">
+						<a href="listacomentarios.php?pag=1" class="prev">← Anterior</a>
+						<?php
+						for($i=1; $i <= $total_paginas; $i++){							
+							echo '<a href="listacomentarios.php?pag='.$i.'"> '.$i.'</a>';
+							/*<a href="listacomentarios.php?pag=' $i ?>"><?php echo $i ?></a>
+							<!--<a href="listacomentarios.php?pag=2" class="active">2</a>
+							<a href="listacomentarios.php?pag=3">3</a>-->*/
+						} ?>
+						<a href="listacomentarios.php?pag=2" class="next">→ Próximo</a>
+					</nav> <br></br>
+					
 					<h4><a href="comentarios.html">Clique aqui para fazer um comentário</a></h4>
 					
-					
-					<p> 
-
-					</p>
-					<!--END OF COMENTÁRIOS-->
-
-
-					
-
 				</div><!-- end of maintext -->
 			</div><!-- end of main -->
 						<div id="side">
@@ -364,3 +363,5 @@
 	<!-- END OF FOOTER -->
 	
 		</body></html>
+
+
