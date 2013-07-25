@@ -96,8 +96,8 @@ require_once "conexao.php";
 	$limite = 5; // Define o limite de registros a serem exibidos com o valor cinco
 	
 	// Captura os dados da variável 'pag' vindo da url, onde contém o número da página atual
-	$pagina = $_GET['pag'];
-	
+	$pagina = ( isset( $_GET['pag'] ) ? $_GET['pag'] : null);
+		
 	/* Se a variável $pagina não contém nenhum valor,
 	então por padrão ela será posta com o valor 1 (primeira página) */
 	if(!$pagina)
@@ -109,7 +109,7 @@ require_once "conexao.php";
 	a ser selecionado no banco de dados baseado na página atual */
 	$inicio = ($pagina * $limite) - $limite;
 	
-	$consulta = "SELECT * FROM comentarios LIMIT $inicio,$limite";
+	$consulta = "SELECT * FROM comentarios WHERE status = 0 ORDER BY id DESC LIMIT $inicio,$limite";
 	
 	$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução da consulta!\");</script>");
 	
@@ -260,32 +260,132 @@ require_once "conexao.php";
 					
 					<p></p>
 					
-					<?php while($linha = mysql_fetch_assoc($resultado)):
-						$nome = $linha['nome_usuario'];
-						$email = $linha['email_usuario'];
-						$comentario = $linha['comentario'];						
+					<?php
+						if($total_paginas > 0):
+							while($linha = mysql_fetch_assoc($resultado)):
+								$nome = $linha['nome_usuario'];
+								$email = $linha['email_usuario'];
+								$comentario = $linha['comentario'];						
 					?>
-						<div class="comentario" id="comentario1">
+						<div class="comentario" >
 							<div class="box-02">
-							  <div class="box-03" id="texto_comentario_1">
+							  <div class="box-03" >
 								<?php echo $nome;?> <br></br> 
-								<?php echo $comentario;?> <br></br>
+								<?php echo $comentario;?>
 							  </div>
 							</div>
 						</div><br></br>
-					<?php endwhile;?>
+					<?php 
+						endwhile;
+						endif;
+						$ant = $pagina - 1;						
+						$prox = $pagina + 1;												
+						$ultima_pag = $total_paginas;
+						$penultima = $ultima_pag - 1;  
+						$adjacentes = 2;
+					?>
 					
+					<!-- PAGINAÇÃO -->
 					<nav class="site-pagination">
-						<a href="listacomentarios.php?pag=1" class="prev">← Anterior</a>
 						<?php
-						for($i=1; $i <= $total_paginas; $i++){							
-							echo '<a href="listacomentarios.php?pag='.$i.'"> '.$i.'</a>';
-							/*<a href="listacomentarios.php?pag=' $i ?>"><?php echo $i ?></a>
-							<!--<a href="listacomentarios.php?pag=2" class="active">2</a>
-							<a href="listacomentarios.php?pag=3">3</a>-->*/
-						} ?>
-						<a href="listacomentarios.php?pag=2" class="next">→ Próximo</a>
+							if($total_paginas > 0){
+								if($total_paginas <= 5){
+									if($total_paginas > 1 && $pagina > 1){
+										echo '<a href="listacomentarios.php?pag=1" > Primeira </a>';
+									}
+									
+									if($pagina > 1){
+										echo '<a href="listacomentarios.php?pag='.$ant.'" class="prev" > <img src="images/pag-ant.png"> </a>';
+									}
+									for($i=1; $i <= $total_paginas; $i++){
+										if($i == $pagina)
+											echo '<a href="listacomentarios.php?pag='.$i.'" class= "active" > '.$i.'</a>';
+										else
+											echo '<a href="listacomentarios.php?pag='.$i.'"> '.$i.'</a>';								
+									} 
+									if($pagina < $ultima_pag && $ultima_pag > 2){
+										echo '<a href="listacomentarios.php?pag='.$prox.'" class="next" > <img src="images/pag-prox.png"> </a>';
+									}
+									
+									if($total_paginas > 1 && $pagina < $ultima_pag){
+										echo '<a href="listacomentarios.php?pag='.$ultima_pag.'" > Última </a>';
+									}
+								}
+								else{
+									if ($pagina < 1 + (2 * $adjacentes)){
+										if($pagina > 1){
+											echo '<a href="listacomentarios.php?pag=1" > Primeira </a>';
+											echo '<a href="listacomentarios.php?pag='.$ant.'" class="prev" > <img src="images/pag-ant.png"> </a>';
+										}
+										
+										for($i=1; $i < 2 + (2 * $adjacentes); $i++){
+											if($i == $pagina)
+												echo '<a href="listacomentarios.php?pag='.$i.'" class= "active" > '.$i.'</a>';
+											else
+												echo '<a href="listacomentarios.php?pag='.$i.'"> '.$i.'</a>';									
+										}
+										echo '...';
+										if($pagina < $ultima_pag){
+											echo '<a href="listacomentarios.php?pag='.$prox.'" class="next" > <img src="images/pag-prox.png"> </a>';
+											echo '<a href="listacomentarios.php?pag='.$ultima_pag.'" > Última </a>';
+										}
+									}								
+									else if($pagina > (2 * $adjacentes) && $total_paginas < 8){
+										echo '<a href="listacomentarios.php?pag=1" > Primeira </a>';
+										echo '<a href="listacomentarios.php?pag='.$ant.'" class="prev" > <img src="images/pag-ant.png"> </a>';
+										echo '...';
+										for($i = $pagina-$adjacentes; $i<= $total_paginas; $i++){
+											if($i == $pagina)
+												echo '<a href="listacomentarios.php?pag='.$i.'" class= "active" > '.$i.'</a>';
+											else
+												echo '<a href="listacomentarios.php?pag='.$i.'"> '.$i.'</a>';									
+										}
+										if($pagina < $ultima_pag){
+											echo '<a href="listacomentarios.php?pag='.$prox.'" class="next" > <img src="images/pag-prox.png"> </a>';
+											echo '<a href="listacomentarios.php?pag='.$ultima_pag.'" > Última </a>';
+										}
+									}
+									else if($pagina > (2 * $adjacentes) && $pagina < $ultima_pag - 3){
+										echo '<a href="listacomentarios.php?pag=1" > Primeira </a>';
+										echo '<a href="listacomentarios.php?pag='.$ant.'" class="prev" > <img src="images/pag-ant.png"> </a>';
+										echo '...';
+										for($i = $pagina-$adjacentes; $i<= $pagina + $adjacentes; $i++){
+											if($i == $pagina)
+												echo '<a href="listacomentarios.php?pag='.$i.'" class= "active" > '.$i.'</a>';
+											else
+												echo '<a href="listacomentarios.php?pag='.$i.'"> '.$i.'</a>';									
+										}
+										echo '...';
+										echo '<a href="listacomentarios.php?pag='.$prox.'" class="next" > <img src="images/pag-prox.png"> </a>';
+										echo '<a href="listacomentarios.php?pag='.$ultima_pag.'" > Última </a>';
+									}
+									else{
+										echo '<a href="listacomentarios.php?pag=1" > Primeira </a>';
+										echo '<a href="listacomentarios.php?pag='.$ant.'" class="prev" > <img src="images/pag-ant.png"> </a>';
+										echo '...';
+										for ($i = $pagina - $adjacentes; $i <= $ultima_pag; $i++){
+											if($i == $pagina)
+												echo '<a href="listacomentarios.php?pag='.$i.'" class= "active" > '.$i.'</a>';
+											else
+												echo '<a href="listacomentarios.php?pag='.$i.'"> '.$i.'</a>';
+										}
+										if($pagina < $ultima_pag){
+											echo '<a href="listacomentarios.php?pag='.$prox.'" class="next" > <img src="images/pag-prox.png"> </a>';
+											echo '<a href="listacomentarios.php?pag='.$ultima_pag.'" > Última </a>';
+										}
+									}							
+								}
+							}
+							else{
+								?>
+								<div id="portal">
+									Nenhum comentário cadastrado. Seja o primeiro a comentar.
+								</div>
+							<?php }					
+							
+						?>						
 					</nav> <br></br>
+					<!-- END OF PAGINAÇÃO -->
 					
 					<h4><a href="comentarios.html">Clique aqui para fazer um comentário</a></h4>
 					
