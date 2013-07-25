@@ -99,6 +99,9 @@ require_once "conexao.php";
 	
 	function cadComentario($nome, $email, $telefone, $comentario, $data){
 		conectar();
+		
+		if($telefone == "")
+			$telefone = NULL;
 	
 		$consulta = "INSERT INTO comentarios (nome_usuario, email_usuario, telefone_usuario, comentario, data)
 					 VALUES ('$nome', '$email', '$telefone', '$comentario', '$data')";
@@ -280,8 +283,7 @@ require_once "conexao.php";
 									<textarea cols="50" rows="6" name="comment" id="comment" class="inputtextarea" tabindex="5" required></textarea>
 									<span class="hint">Digite seu comentário</span><br /><br />
 									<label>
-										<input class="button"  type="submit" name="comentar" id="button" value="Enviar" tabindex="6" />
-										<a rel="nofollow" id="cancel-comment-reply-link" href="/2010/05/desarrollo-de-widgets/#respond" style="display:none;">Click here to cancel reply.</a>  
+										<input class="button"  type="submit" name="comentar" id="button" value="Enviar" tabindex="6" />										
 									</label>
 													
 									<input type='hidden' name='comment_post_ID' value='2374' id='comment_post_ID' />
@@ -291,6 +293,7 @@ require_once "conexao.php";
 							</form>
 						</div>
 					</div>
+					<br></br><h4><a href="listacomentarios.php">Ver comentários</a></h4>
 				</div><!-- end of maintext -->
 			</div><!-- end of main -->
 						<div id="side">

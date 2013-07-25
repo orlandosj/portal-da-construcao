@@ -159,8 +159,7 @@
 											</div>
 											
 											<label>
-												<input class="button"  type="submit" name="submit" id="button" value="Login" tabindex="" />
-												<a rel="nofollow" id="cancel-comment-reply-link" href="/2010/05/desarrollo-de-widgets/#respond" style="display:none;">Click here to cancel reply.</a>  
+												<input class="button"  type="submit" name="submit" id="button" value="Login" tabindex="3" />												
 											</label>
 											<a href="#/">Esqueci minha senha</a></h3>
 																					
@@ -289,8 +288,7 @@
 									<textarea cols="50" rows="6" name="comment" id="comment" class="inputtextarea" tabindex="5" required></textarea>
 									<span class="hint">Digite a sua mensagem. Em breve entraremos em contato</span><br /><br />
 									<label>
-										<input class="button"  type="submit" name="submit" id="button" value="Enviar" tabindex="6" />
-										<a rel="nofollow" id="cancel-comment-reply-link" href="/2010/05/desarrollo-de-widgets/#respond" style="display:none;">Click here to cancel reply.</a>  
+										<input class="button"  type="submit" name="submit" id="button" value="Enviar" tabindex="6" />										
 									</label>
 													
 									<input type='hidden' name='comment_post_ID' value='2374' id='comment_post_ID' />
