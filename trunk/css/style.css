@@ -94,8 +94,8 @@ blockquote {font-style:italic;margin:25px 0 25px 0px;color:#333;padding:10px 20p
 #slides_container{
 	height:281px; 
 	width: 990px; 
-	/*background-image:url(../images/bg_slides_container.png);*/ 
-	/*background-repeat:no-repeat; */
+	/*background-image:url(../images/bg_slides_container.png); 
+	background-repeat:no-repeat;*/ 
 	background-position: rigth;
 }
 #slider {
@@ -603,6 +603,7 @@ input.text{ width:290px;font:12px/12px 'courier new',courier,monospace;color:#33
 .flexslider {
 	position: relative; 
 	zoom: 1;
+	float:left;/*inserido por orlando*/
 }
 .flexslider .slides > li {
 	display: none; 
@@ -614,7 +615,8 @@ input.text{ width:290px;font:12px/12px 'courier new',courier,monospace;color:#33
 }
 .flexslider .slides img {
 	max-width: 100%; 
-	display: block;}
+	display: block;
+}
 .flex-pauseplay span {
 	text-transform: capitalize;
 }
@@ -645,15 +647,16 @@ html[xmlns] .slides {
 }
 .flexslider .slides {
 	zoom: 1;
+	float:left;/*inserido por orlando*/
 }
 .flexslider .flex-caption {
-	width: 96%;
+	width: 50%;
 	padding: 2%;
 	position: absolute;
 	left: 0;
 	bottom: 0;
 	background: #999;
-	background: rgba(0,0,0,0.3); 
+	background: rgba(0,0,0,0.3);
 	color: #fff;
 	text-shadow: 0 -1px 0 rgba(0,0,0,0.3);
 	font-size: 14px;
@@ -664,7 +667,7 @@ html[xmlns] .slides {
 	height: 52px; 
 	margin: -20px 0 0; 
 	display: block; 
-	background:transparent url(http://modularhtml.com.br/modulos/4.02.media_slideshow/img/bg_direction_nav.png) no-repeat top left;
+	/*background:transparent url(http://modularhtml.com.br/modulos/4.02.media_slideshow/img/bg_direction_nav.png) no-repeat top left;*/
 	position: absolute; 
 	top: 50%; 
 	z-index: 10; 
@@ -699,7 +702,7 @@ html[xmlns] .slides {
 	text-align: center;
 }
 .flex-control-nav li {
-	margin: 0 6px; 
+	margin: 10 6px; 
 	display: inline-block; 
 	zoom: 1; 
 }
@@ -764,11 +767,77 @@ html[xmlns] .slides {
 /* Flexslider slideshow */
 .site-slideshow{
 	background: transparent; 
-	max-width: 650px;
-	padding: 0 16px;
+	max-width: 400px;
+	padding: 5 16px;
+	float:left;/*inserido por orlando*/
+}
+
+.img-profissionais{
+	width: 100px; 
+	height: 100px;
+	float: left;
+}
+
+.info-profissionais{
+	width: 480px; 
+	height: 320px;
+	float: right;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:16px;
+	color:#0E0E0E;
+	text-align: left;
+	line-height:150%;
+	overflow: hidden;
+	padding:3px;
+	background-attachment:scroll;
+	border-radius:5px;
+	box-shadow: 0 0.9px 0 #ccc, 0 -1px #ffffff;
+    background: #F1F1F1;
+    border:padding-top;
+}
+
+.profissional{
+	width: 940px; 
+	height: 325px;
+	color:#0E0E0E;
+	padding:3px;
+	background-attachment:scroll;
+	border-radius:5px;
+	box-shadow: 0 0.9px 0 #ccc, 0 -1px #ffffff;
+    background: #F1F1F1;
+    border:padding-top;
 }
 
 /*** END SLIDER IMAGENS PROFISSIONAIS ***/
+
+/*** mousehover ***/
+ul.thumb {
+ float: left;
+ list-style: none;
+ margin: 0px;
+ width: 360px;
+}
+ul.thumb li {
+ margin: 5px;
+ float: left;
+ position: relative;
+ width: 300px;
+ height: 290px;
+ z-index: 0;
+}
+ul.thumb li img {
+ width: 300px; height: 300px;
+ position: absolute;
+ margin: 0px; 
+ top: 0px; 
+ left: 0px; 
+ overflow: hidden;
+}
+
+.oculto{display: none;}
+
+/*** end of mousehover ***/
+
 
 /*.feedback{
 	position:absolute;

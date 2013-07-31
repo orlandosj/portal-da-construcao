@@ -113,7 +113,7 @@ require_once "conexao.php";
 	}
 
 	if(isset($_POST["comentar"])){
-		cadComentario($nome, $email, $telefone, $comentario, $data);		
+		cadComentario($nome, $email, $telefone, $comentario, $data);			
 	}	
 ?>
 
@@ -160,8 +160,7 @@ require_once "conexao.php";
 											</div>
 											
 											<label>
-												<input class="button"  type="submit" name="submit" id="button" value="Login" tabindex="" />
-												<a rel="nofollow" id="cancel-comment-reply-link" href="/2010/05/desarrollo-de-widgets/#respond" style="display:none;">Click here to cancel reply.</a>  
+												<input class="button"  type="submit" name="submit" id="button" value="Login" tabindex="3" />												
 											</label>
 											<a href="#/">Esqueci minha senha</a></h3>
 																					
@@ -192,7 +191,7 @@ require_once "conexao.php";
 		<div id="headertext"> 
 			<p style="font-family:arial;color:white;font-size:30px;">Aqui você encontra todos os</p>
 			<p style="font-family:arial;color:white;font-size:30px;">profissionais que precisa para</p>
-			<p style="font-family:arial;color:white;font-size:30px;">construir sua casa.</p>
+			<p style="font-family:arial;color:white;font-size:30px;">construir ou reformar sua casa.</p>
 			<p style="font-family:arial;color:white;font-size:30px;">  </p>
 			<p style="font-family:arial;color:white;font-size:30px;"><br>Clique e confira!!!</br></p>
 		</div>		
@@ -220,7 +219,7 @@ require_once "conexao.php";
 	<div id="padding_content">
 		<div class="clearfix" id="topcontent">
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/arquiteto.jpg">
-			<h3><a href="#/">Arquitetos e Engenheiros</a></h3>
+			<h3><a href="profissionais.php">Arquitetos e Engenheiros</a></h3>
 			<p>Escolha o profissional para projetar sua casa</p>
 			</div>
 			<div class="linetop"></div>
@@ -233,12 +232,35 @@ require_once "conexao.php";
 			<h3><a href="#">Carpinteiros</a></h3>
 			<p>Escolha o profissional para fazer seu telhado</p>
 			</div>
+			<div class="linetop"></div>			
+			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/eletricista.jpg">
+			<h3><a href="#">Eletricistas</a></h3>
+			<p>Escolha o profissional para realizar seu projeto elétrico</p>
+			</div>		
+			
+			<div><img alt="" src="images/prof/separador2.png"> </div>
+			
+			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/encanador.jpg">
+			<h3><a href="#">Encanadores</a></h3>
+			<p>Escolha o profissional para cuidar da parte hidráulica</p>
+			</div>
+			<div class="linetop"></div>
+			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/serralheiro.jpg">
+			<h3><a href="#">Serralheiros</a></h3>
+			<p>Escolha o profissional para fazer portões, janelas, etc</p>
+			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/pintor.jpg">
 			<h3><a href="#">Pintores</a></h3>
 			<p>Escolha o profissional para pintar sua casa</p>
+			</div>
+			<div class="linetop"></div>
+			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/paisagista.jpg">
+			<h3><a href="#">Paisagistas</a></h3>
+			<p>Escolha o profissional para fazer seu jardim</p>
 			</div>			
 		</div><!-- end of topcontent -->
+		
 		<div id="maincontent">
 			<div id="main">
 				<div id="maintext">
@@ -338,16 +360,16 @@ require_once "conexao.php";
 					<div class="footleft">
 						<h3>Copyright &amp; Usage
 </h3>
-						<p>O conteúdo deste site é protegido por O bar da Vez, é proibido publicar nossas informações em outro meio sem autorização prévia.
+						<p>O conteúdo deste site é protegido por Portal da Construção, sendo proibido publicar nossas informações em outro meio sem autorização prévia.
 </p>
-						<p>Copyright &copy; 2013. O bar da vez</p>
+						<p>Copyright &copy; 2013. Portal da Construção</p>
 					</div><!-- end of footleft -->
 					<div class="footleft">
 						<h3>Advertise here
 </h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
- <a href="#/">contact us
-</a>.</p>
+						<p>O Portal da Construção não se responsabiliza pelas informações fornecidas pelos profissionais cadastrados.
+							<!--<a href="#/">contact us
+							</a>.--></p>
 					</div><!-- end of footleft -->
 					<div style="margin:0px;padding-top:10px" class="footright">
 						<div id="bookmark">
