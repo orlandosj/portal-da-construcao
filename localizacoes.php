@@ -38,12 +38,7 @@ try {
 			$sql = sprintf("SELECT * FROM dados_cidades WHERE uf = '%s'", $_GET['estado']);
 			$option = 'a Cidade';
 			$string = 'nome';			
-			break;			
-		case 'bairro' :
-			$sql = sprintf("SELECT * FROM dados_bairros WHERE cidade = '%s'", utf8_encode($_GET['cidade']));
-			$option = ' o Bairro';
-			$string = 'nome';	
-			break;			
+			break;				
 	}
 	/*
 	 * Executamos o SQL aqui
