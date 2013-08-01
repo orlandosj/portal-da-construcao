@@ -1,13 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
 
-		<title>Cadastro</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		
-		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-		
-		<link media="screen" type="text/css" href="css/style.css" rel="stylesheet">
+	<title>Portal da Construção</title>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+	
+	<link media="screen" type="text/css" href="css/style.css" rel="stylesheet">
 
 	
 	<script id="twitter-wjs" src="http://platform.twitter.com/widgets.js"></script>
@@ -16,11 +12,6 @@
 	<script src="scripts/jquery.lavalamp.min.js" type="text/javascript"></script>
 	<script src="scripts/js.js" type="text/javascript"></script>
 	<script src="scripts/jquery.cycle.all.js" type="text/javascript"></script>
-	
-	<script src="scripts/jquery.min.js" type="text/javascript"></script>
-	<script src="scripts/jquery.maskedinput.js" type="text/javascript"></script>
-	
-	<script src="scripts/combo.js"></script>	
 	
 	<link rel="stylesheet" href="scripts/coin-slider-styles.css" type="text/css" />
 	
@@ -31,15 +22,6 @@
 			pause: 1,
 		});
 	});
-	</script>
-	
-	<script type="text/javascript">  
-		jQuery.noConflict(); 
-		jQuery(function($){ 
-		$("#telefone").mask("(99) 9999-9999");
-		$("#telefone2").mask("(99) 9999-9999");		
-		$("#cpf").mask("999.999.999-99");		  		
-		}); 
 	</script>
 	
 	<script type="text/javascript">
@@ -89,71 +71,32 @@
 		});
 	</script>
 	
-	<script>
-	function validarSenha(){
-		senha1 = document.cadastro.senha.value
-		senha2 = document.cadastro.confirmasenha.value
-	 
-		if (senha1 != senha2){
-			alert("Os campos senha e confirmação de senha devem ser iguais")
-			document.cadastro.confirmasenha.select();
-			document.cadastro.confirmasenha.focus();			
-		}
-	}
-	</script>
-	
-	<script>
-	function validarTamanhoSenha(){
-		senha = document.cadastro.senha.value
-		if (senha.length < "6"){
-			alert("A senha deve conter pelo menos 6 caracteres")
-			document.cadastro.senha.focus();						
-		}
-	}
-	</script>
-	
 	<script charset="utf-8" src="scripts/slider.js" type="text/javascript"></script>
 
 <?php
-/*Página para CRUD de comentários*/
+/*Selects de comentários e dicas*/
 require_once "conexao.php";
 	
-	function cadProfissional($nome, $cpf, $email, $telefone, $telefone2, $senha, $profissao, $estado, 
-							$cidade, $servicos, $info, $data){
-		conectar();
+	conectar();
 		
-		if($telefone2 == "")
-			$telefone2 = NULL;
+	$limite = 2; // Define o limite de registros a serem exibidos com o valor cinco
 	
-		$consulta = "INSERT INTO profissionais (nome, cpf, email, telefone, telefone_alternativo, 
-												senha, profissao, estado, cidade, servicos, informacoes, data_cadastro)
-					 VALUES ('$nome', '$cpf', '$email', '$telefone', '$telefone2', password('$senha'), '$profissao', '$estado', 
-							'$cidade', '$servicos', '$info', '$data')";
-		$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução!\");</script>");	
-		
-		echo "<script>alert('Cadastro realizado com sucesso! Faça login para colocar fotos dos seus trabalhos, dar dicas ou alterar seus dados!')</script>";
-		
+	$consulta = "SELECT * FROM comentarios WHERE status = 0 ORDER BY id DESC LIMIT 0,2";
 	
-	}
+	$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução da consulta!\");</script>");
+	
+	$consulta_total = mysql_query("SELECT id FROM comentarios"); // Seleciona o campo id da nossa tabela produtos
+	// Captura o número do total de registros no nosso banco a partir da nossa consulta
+	$total_registros = mysql_num_rows($consulta_total);
 
-	if(isset($_POST["cadastrar"])){
-		$nome = $_POST["author"];
-		$cpf = $_POST["cpf"];
-		$email = $_POST["email"];
-		$telefone = $_POST["telefone"];
-		$telefone2 = $_POST["telefone2"];
-		$senha = $_POST["senha"];
-		$profissao = $_POST["profissao"];
-		$estado = $_POST["estado"];
-		$cidade = $_POST["cidade"];
-		$servicos = $_POST["servicos"];
-		$info = $_POST["info"];
-		$data =  date('Y-m-d H:i:s');
-		
-		cadProfissional($nome, $cpf, $email, $telefone, $telefone2, $senha, $profissao, $estado, $cidade, 
-						$servicos, $info, $data);		
-	}	
-?>	
+	$consulta_dicas = "SELECT * FROM dicas JOIN profissionais ON dicas.id_profissional = profissionais.id ORDER BY dicas.id DESC LIMIT 0,2";
+	
+	$resultado_dicas = mysql_query($consulta_dicas) or die("<script language=JavaScript>alert(\"Falha na execução da consulta!\");</script>");
+	
+	$consulta_total_dicas = mysql_query("SELECT id FROM dicas"); // Seleciona o campo id da nossa tabela produtos
+	// Captura o número do total de registros no nosso banco a partir da nossa consulta
+	$total_dicas = mysql_num_rows($consulta_total_dicas);	
+?>
 	
 <body class="home blog" data-twttr-rendered="true">
 
@@ -198,8 +141,7 @@ require_once "conexao.php";
 											</div>
 											
 											<label>
-												<input class="button"  type="submit" name="submit" id="button" value="Login" tabindex="" />
-												<a rel="nofollow" id="cancel-comment-reply-link" href="/2010/05/desarrollo-de-widgets/#respond" style="display:none;">Click here to cancel reply.</a>  
+												<input class="button"  type="submit" name="submit" id="button" value="Login" tabindex="3" />												
 											</label>
 											<a href="#/">Esqueci minha senha</a></h3>
 																					
@@ -212,6 +154,7 @@ require_once "conexao.php";
 						<!-- Não remova o div#mask, pois ele é necessário para preencher toda a janela -->
 						<div id="mask"></div>
 					</div>
+					
 				  <li class="back" style="left: 0px; width: 74px;"><div class="left"></div></li></ul>
 				</div>
 			</div><!-- end of topmenu -->
@@ -251,8 +194,9 @@ require_once "conexao.php";
   </div> 
   
 <!-- END OF SLIDES CONTAINER -->
-		
-	<!-- BEGIN CONTENT -->
+
+<!-- BEGIN CONTENT -->
+
 	<div class="clearfix" id="content">
 	<div id="padding_content">
 		<div class="clearfix" id="topcontent">
@@ -298,104 +242,120 @@ require_once "conexao.php";
 			<p>Escolha o profissional para fazer seu jardim</p>
 			</div>			
 		</div><!-- end of topcontent -->
-		
+		<br></br>
 		<div id="maincontent">
 			<div id="main">
 				<div id="maintext">
 
-					<h2>Cadastro</h2>
-					
-					<p></p>
-					
-					<div id="portal">
-						Obrigado por efetuar seu cadastro no Portal da Construção. Agora você pode dar dicas sobre
-						a área em que atua, colocar fotos de trabalhos realizados e ainda atualizar seus dados quando 
-						necessário. Faça login e verifique sua página de serviços.
-					</div>
-					
-					<br></br><h4><a href="#dialog" name="modal">Clique aqui para fazer login</a></h4>
-					
-					<br></br><h4><a href="index.php">Clique aqui para voltar à página principal</a></h4>
-					
-					<p></p>
-					
-					<div id="respond" class="oculto">
-						<div id="contactFormArea" class="oculto">
-							<form class="oculto" action="" method="post" id="cadastro" name="cadastro" >
-								<fieldset>
-									
-									<label for="author">Nome:</label>
-									<input class="inputcadastro" type="text" size="25" name="author" id="author" value="" tabindex="1" required/>
-									<span class="hint">Informe seu nome completo</span><br /><br />
-									
-									<label for="cpf">CPF:</label>
-									<input class="inputcadastro" type="text" name="cpf" id="cpf" value="" tabindex="2" required/>
-									<span class="hint">Informe seu CPF</span><br /><br />
-									
-									<label for="email">Email:</label>
-									<input class="inputcadastro" type="text" size="25" name="email" id="email" value="" tabindex="3" required/>
-									<span class="hint">Informe um email válido para que possamos entrar em contato. Este email não será compartilhado com ninguém.</span><br /><br />
-									
-									<label for="telefone">Telefone:</label>
-									<input class="inputcadastro" type="text" size="25" name="telefone" id="telefone" value="" tabindex="4" required/>
-									<span class="hint">Informe um telefone para contato</span><br /><br />
-									
-									<label for="telefone2">Telefone Alternativo:</label>
-									<input class="inputcadastro input-help" type="text" size="25" name="telefone2" id="telefone2" value="" tabindex="5" />
-									<span class="hint">Informe outro número de telefone para contato (não obrigatório)</span><br /><br />
-									
-									<label for="senha">Senha:</label>
-									<input class="inputcadastro input-help" type="password" size="25" name="senha" id="senha" value="" tabindex="6" onBlur="validarTamanhoSenha()"/>
-									<span class="hint">Escolha sua senha para acesso ao portal (deve ter pelo menos 6 caracteres)</span><br /><br />
-									
-									<label for="confirmasenha">Confirmação de Senha:</label>
-									<input class="inputcadastro input-help" type="password" size="25" name="confirmasenha" id="confirmasenha" value="" tabindex="7" onBlur="validarSenha()"/>
-									<span class="hint">Repita a senha escolhida para acesso ao portal</span><br /><br />
-									
-									<label for="profissao">Profissão:</label>
-									<select required aria-required="true" class="dropdownlist" name="profissao" id="profissao" tabindex="8"> 
-											<option selected value="">Selecione a profissão</option>
-											<option value="arquiteto">Arquiteto</option>
-											<option value="carpinteiro">Carpinteiro</option>
-											<option value="eletricista">Eletricista</option>
-											<option value="encanador">Encanador</option>
-											<option value="engenheiro">Engenheiro</option>
-											<option value="paisagista">Paisagista</option>
-											<option value="pedreiro">Pedreiro</option>
-											<option value="pintor">Pintor</option>										
-											<option value="serralheiro">Serralheiro</option>											
-									</select>
-									<span class="hint">Selecione a sua profissão</span><br /><br />
-									
-									<label for="estado">Estado:</label>
-									<select required aria-required="true" class="dropdownlist" name="estado" id="estado" tabindex="9"> 																																			
-										
-									</select>
-									<span class="hint">Selecione o estado no qual trabalha</span><br /><br />
-									
-									<label for="cidade">Cidade:</label>
-									<select required aria-required="true" class="dropdownlist" name="cidade" id="cidade" tabindex="10"> 
-										<option value="0">---Selecione primeiro o estado---</option>	
-									</select>
-									<span class="hint">Selecione a cidade na qual trabalha</span><br /><br/>
+					<!--<h1>O Bar da Vez</h1>
+					<img style="float:right;margin:10px 0px 10px 0;width:120px" src="images/book.png">
+					<p>  Mais do que uma ferramenta de busca, O Bar da Vez é o primeiro e único site que tráz tudo sobre os bares de Pedro Leopoldo e região. 
+					Participe, vote nos seus bares favoritos, contribua deixando os seus comentários, indicando novos bares e espalhando a novidade. 
+					O Bar da vez, sempre a melhor opção! </p>
+					<p> 
 
-									<label for="servico">Serviços prestados:</label>
-									<textarea class="inputtextarea" cols="60" rows="5" name="servicos" id="servicos" tabindex="11" required></textarea>
-									<span class="hint">Digite aqui os principais serviços que realiza, separados por vírgula</span><br /><br />
-									
-									<label for="info">Informações adicionais:</label>
-									<textarea class="inputtextarea" cols="60" rows="5" name="info" id="info" tabindex="12" ></textarea>
-									<span class="hint">Digite aqui outras informações relevantes a seus clientes (preenchimento não obrigatório)</span><br /><br />
-									<label>
-										<input class="button"  type="submit" name="cadastrar" id="button" value="Cadastrar" tabindex="13" />										
-									</label><br></br>
-													
-									
-																			
-								</fieldset>
-							</form>
-						</div>
+					</p>-->
+					
+					<div class="anuncio" id="anuncio">
+						 <div class="box-02">
+							<a href="cadastro.html">
+							  <div class="box-anuncio" id="texto_anuncio">
+									<img src="images/cadastre-se2.jpg"><br></br>
+								   Não perca tempo!!! Anuncie seus serviços no Portal da Construção!!!<p></p>
+								   Você paga apenas R$20,00 por mês!!! É muito barato!!!<p></p>
+								   Clique aqui e faça seu cadastro agora mesmo!!!
+							  </div>							  
+							</a>
+						 </div>
 					</div>
+					
+					<br></br>
+					
+					<!--DICAS-->					
+					<h2>Dicas de especialistas</h2>
+					
+					<?php
+						if($total_dicas > 0):
+							while($linha = mysql_fetch_assoc($resultado_dicas)):
+								$nome = $linha['nome'];
+								$profissao = $linha['profissao'];
+								$dica = $linha['dica'];					
+					?>
+						<div class="dica">
+							<div class="box-02">
+							  <div class="box-03">
+									<?php echo $nome ." - ". $profissao;?> <br></br> 
+									<?php echo $dica;?>
+							  </div>
+							</div>
+						</div>
+						<br></br>
+					<?php 
+						endwhile;
+						if($total_dicas > 2):
+					?>
+						<h4><a href="listadicas.php">Veja outras dicas</a></h4>						
+					<?php
+						endif;
+						else:
+					?>
+							<div id="portal">
+								Nenhuma dica cadastrada. 
+							</div>
+							<br></br>							
+					<?php endif; ?>
+					<br></br>				
+					
+					<p> 
+					
+					</p>
+					<p> 
+					
+					</p>
+					<!--END OF DICAS-->
+					
+					<!--COMENTÁRIOS-->
+					<h2>Comentários</h2>
+					<p> </p>
+					
+					<?php
+						if($total_registros > 0):
+							while($linha = mysql_fetch_assoc($resultado)):
+								$nome = $linha['nome_usuario'];
+								$email = $linha['email_usuario'];
+								$comentario = $linha['comentario'];						
+					?>
+						<div class="comentario" >
+							<div class="box-02">
+							  <div class="box-03" >
+								<?php echo $nome;?> <br></br> 
+								<?php echo $comentario;?>
+							  </div>
+							</div>
+						</div><br></br>
+					<?php 
+						endwhile;
+						if($total_registros > 2):
+					?>
+						<h4><a href="listacomentarios.php">Ver todos os comentários</a></h4>
+					<?php endif;?>
+						<h4><a href="comentarios.html">Clique aqui para fazer um comentário</a></h4>
+					<?php
+						else:
+					?>
+							<div id="portal">
+								Nenhum comentário cadastrado. Seja o primeiro a comentar.
+							</div>
+							<br></br>	
+							<h4><a href="comentarios.html">Clique aqui para fazer um comentário</a></h4>
+					<?php endif;?>
+					<br></br>	
+					
+					<p> 
+
+					</p>
+					<!--END OF COMENTÁRIOS-->			
+
 				</div><!-- end of maintext -->
 			</div><!-- end of main -->
 						<div id="side">
