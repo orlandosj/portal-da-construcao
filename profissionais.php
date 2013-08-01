@@ -143,7 +143,7 @@
 			<div id="topmenu">
 				<div id="nav">
 				  <ul id="menu" class="lavaLamp">
-					<li class="current_page_item"><a href="index.html">Início</a></li>
+					<li class="current_page_item"><a href="index.php">Início</a></li>
 					<li class="page_item page-item-2357"><a href="portal.html">O Portal</a></li>
 					<li class="page_item page-item-2355"><a href="cadastro.html">Cadastre-se</a></li>
 					<li class="page_item page-item-2355"><a href="contato.html">Contato</a></li>
@@ -279,7 +279,7 @@
 					<div id="slideshow" class="flexslider site-slideshow">
 						<ul class="slides">
 							<li>
-								<img src="images/img/projeto_casa.jpg" alt="Imagem Slide">
+								<img src="images/semfoto.jpg" alt="Imagem Slide">
 								<p class="flex-caption">Imagem 1</p>
 							</li>
 							<li>
@@ -287,7 +287,7 @@
 								<p class="flex-caption">Imagem 2</p>
 							</li>
 							<li>
-								<img src="images/img/esboco_interno.jpg" alt="Imagem Slide">
+								<img src="images/img/projeto_casa.jpg" alt="Imagem Slide">
 								<p class="flex-caption">Imagem 3</p>
 							</li>
 							<li>
@@ -295,7 +295,7 @@
 								<p class="flex-caption">Imagem 4</p>
 							</li>
 							<li>
-								<img src="images/img/esboco_interno.jpg" alt="Imagem Slide">
+								<img src="images/img/projeto_casa.jpg" alt="Imagem Slide">
 								<p class="flex-caption">Imagem 5</p>
 							</li>
 						</ul>

@@ -118,25 +118,25 @@
 /*Página para CRUD de comentários*/
 require_once "conexao.php";
 	
-	function cadProfissional($nome, $cpf, $email, $telefone, $telefone2, $senha, $profissao, $estado, 
-							$cidade, $servicos, $info, $data){
+	
+	
+	function updateProfissional($id, $email, $telefone, $telefone2, $estado, $cidade, $servicos, $info){
 		conectar();
 		
 		if($telefone2 == "")
 			$telefone2 = NULL;
 	
-		$consulta = "INSERT INTO profissionais (nome, cpf, email, telefone, telefone_alternativo, 
-												senha, profissao, estado, cidade, servicos, informacoes, data_cadastro)
-					 VALUES ('$nome', '$cpf', '$email', '$telefone', '$telefone2', password('$senha'), '$profissao', '$estado', 
-							'$cidade', '$servicos', '$info', '$data')";
+		$consulta = "UPDATE profissionais  SET email = '$email', telefone = '$telefone', telefone_alternativo = '$telefone2', 
+												estado = '$estado', cidade = '$cidade', servicos = '$servicos', 
+												informacoes = '$info' WHERE id = '$id')";
 		$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução!\");</script>");	
 		
-		echo "<script>alert('Cadastro realizado com sucesso! Faça login para colocar fotos dos seus trabalhos, dar dicas ou alterar seus dados!')</script>";
+		echo "<script>alert('Dados alterados com sucesso!')</script>";
 		
 	
 	}
 
-	if(isset($_POST["cadastrar"])){
+	if(isset($_POST["atualiar"])){
 		$nome = $_POST["author"];
 		$cpf = $_POST["cpf"];
 		$email = $_POST["email"];
@@ -149,9 +149,7 @@ require_once "conexao.php";
 		$servicos = $_POST["servicos"];
 		$info = $_POST["info"];
 		$data =  date('Y-m-d H:i:s');
-		
-		cadProfissional($nome, $cpf, $email, $telefone, $telefone2, $senha, $profissao, $estado, $cidade, 
-						$servicos, $info, $data);		
+		updateProfissional($id, $email, $telefone, $telefone2, $estado, $cidade, $servicos, $info);		
 	}	
 ?>	
 	
@@ -255,73 +253,26 @@ require_once "conexao.php";
 	<!-- BEGIN CONTENT -->
 	<div class="clearfix" id="content">
 	<div id="padding_content">
-		<div class="clearfix" id="topcontent">
-			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/arquiteto.jpg">
-			<h3><a href="profissionais.php">Arquitetos e Engenheiros</a></h3>
-			<p>Escolha o profissional para projetar sua casa</p>
-			</div>
-			<div class="linetop"></div>
-			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/pedreiro.jpg">
-			<h3><a href="#">Pedreiros</a></h3>
-			<p>Escolha o profissional para executar sua obra</p>
-			</div>
-			<div class="linetop"></div>
-			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/carpinteiro.jpg">
-			<h3><a href="#">Carpinteiros</a></h3>
-			<p>Escolha o profissional para fazer seu telhado</p>
-			</div>
-			<div class="linetop"></div>			
-			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/eletricista.jpg">
-			<h3><a href="#">Eletricistas</a></h3>
-			<p>Escolha o profissional para realizar seu projeto elétrico</p>
-			</div>		
-			
-			<div><img alt="" src="images/prof/separador2.png"> </div>
-			
-			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/encanador.jpg">
-			<h3><a href="#">Encanadores</a></h3>
-			<p>Escolha o profissional para cuidar da parte hidráulica</p>
-			</div>
-			<div class="linetop"></div>
-			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/serralheiro.jpg">
-			<h3><a href="#">Serralheiros</a></h3>
-			<p>Escolha o profissional para fazer portões, janelas, etc</p>
-			</div>
-			<div class="linetop"></div>
-			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/pintor.jpg">
-			<h3><a href="#">Pintores</a></h3>
-			<p>Escolha o profissional para pintar sua casa</p>
-			</div>
-			<div class="linetop"></div>
-			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/paisagista.jpg">
-			<h3><a href="#">Paisagistas</a></h3>
-			<p>Escolha o profissional para fazer seu jardim</p>
-			</div>			
-		</div><!-- end of topcontent -->
-		
 		<div id="maincontent">
 			<div id="main">
 				<div id="maintext">
 
-					<h2>Cadastro</h2>
 					
-					<p></p>
 					
 					<div id="portal">
-						Obrigado por efetuar seu cadastro no Portal da Construção. Agora você pode dar dicas sobre
-						a área em que atua, colocar fotos de trabalhos realizados e ainda atualizar seus dados quando 
-						necessário. Faça login e verifique sua página de serviços.
+						Abaixo você pode alterar os dados cadastrados, alterar sua senha, inserir fotos ou 
+						substituir as fotos cadastradas e dar dicas para os clientes sobre sua área de atuação.
 					</div>
-					
-					<br></br><h4><a href="#dialog" name="modal">Clique aqui para fazer login</a></h4>
-					
-					<br></br><h4><a href="index.php">Clique aqui para voltar à página principal</a></h4>
 					
 					<p></p>
 					
-					<div id="respond" class="oculto">
-						<div id="contactFormArea" class="oculto">
-							<form class="oculto" action="" method="post" id="cadastro" name="cadastro" >
+					<h2>Cadastro</h2>				
+					
+					<p></p>
+					
+					<div id="respond">
+						<div id="contactFormArea">
+							<form action="" method="post" id="update" name="update" >
 								<fieldset>
 									
 									<label for="author">Nome:</label>
@@ -387,7 +338,41 @@ require_once "conexao.php";
 									<textarea class="inputtextarea" cols="60" rows="5" name="info" id="info" tabindex="12" ></textarea>
 									<span class="hint">Digite aqui outras informações relevantes a seus clientes (preenchimento não obrigatório)</span><br /><br />
 									<label>
-										<input class="button"  type="submit" name="cadastrar" id="button" value="Cadastrar" tabindex="13" />										
+										<input class="button"  type="submit" name="atualizar" id="button" value="Atualizar" tabindex="13" />										
+									</label><br></br>
+													
+									
+																			
+								</fieldset>
+							</form>
+						</div>
+					</div>
+					
+					<br></br>
+					
+					<h2>Alterar senha (colocar em uma div no lugar dos anuncios)</h2>
+					
+					<br></br>
+					
+					<div id="senha">
+						<div id="formsenha">
+							<form action="" method="post" id="updatesenha" name="updatesenha" >
+								<fieldset>
+									
+									<label for="senha">Senha atual:</label>
+									<input class="inputcadastro input-help" type="password" size="25" name="senhaantiga" id="senhaantiga" value="" tabindex="1" onBlur="validarSenhaAntiga()"/>
+									<span class="hint">Informe a sua senha atual</span><br /><br />
+									
+									<label for="senha">Nova senha:</label>
+									<input class="inputcadastro input-help" type="password" size="25" name="senhanova" id="senhanova" value="" tabindex="2" onBlur="validarTamanhoSenha()"/>
+									<span class="hint">Informe a sua nova senha</span><br /><br />
+									
+									<label for="confirmasenha">Confirmação de Senha:</label>
+									<input class="inputcadastro input-help" type="password" size="25" name="confirmasenha" id="confirmasenha" value="" tabindex="3" onBlur="validarSenha()"/>
+									<span class="hint">Repita a nova senha escolhida para acesso ao portal</span><br /><br />								
+									
+									<label>
+										<input class="button"  type="submit" name="alterarsenha" id="button" value="Alterar senha" tabindex="4" />										
 									</label><br></br>
 													
 									
@@ -398,33 +383,8 @@ require_once "conexao.php";
 					</div>
 				</div><!-- end of maintext -->
 			</div><!-- end of main -->
-						<div id="side">
-				<div class="sidebox">
-					<div class="c_bottomsidebox">
-						<!--<div class="contentbox">
-						<iframe width="300" scrolling="no" height="500" frameborder="0" id="twitter-widget-0" class="twitter-timeline twitter-timeline-rendered" allowtransparency="true" style="border: medium none; max-width: 100%; min-width: 180px;" title="Twitter Timeline Widget"></iframe>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-
-						</div>-->
-						<div id="anuncios" class="sidetext">
-									<h2>Parceiros</h2>
-									<ul class="advertisers clearfix">
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>																				
-									</ul>
-								</div><!-- end of sidetext -->
-					</div>
-				</div><!-- end of sidebox -->
-			</div><!-- end of side -->
-					</div><!-- end of maincontent -->
+			
+		</div><!-- end of maincontent -->
 	</div>
 	</div>
 <!-- END OF CONTENT -->

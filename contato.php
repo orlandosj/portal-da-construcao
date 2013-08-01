@@ -91,13 +91,6 @@
 	/*Página para CRUD de comentários*/
 		require_once "conexao.php";
 		
-		$nome = $_POST["author"];
-		$email = $_POST["email"];
-		$telefone = $_POST["telefone"];
-		$assunto = $_POST["assunto"];
-		$mensagem = $_POST["mensagem"];
-		$hora =  date('Y-m-d H:i:s');
-		
 		function cadMensagem($nome, $email, $telefone, $assunto, $mensagem, $hora){
 			conectar();
 		
@@ -111,6 +104,12 @@
 		}	
 		
 		if(isset($_POST["comentar"])){
+			$nome = $_POST["author"];
+			$email = $_POST["email"];
+			$telefone = $_POST["telefone"];
+			$assunto = $_POST["assunto"];
+			$mensagem = $_POST["mensagem"];
+			$hora =  date('Y-m-d H:i:s');
 			cadMensagem($nome, $email, $telefone, $assunto, $mensagem, $hora);		
 		}
 		
@@ -131,7 +130,7 @@
 			<div id="topmenu">
 				<div id="nav">
 				  <ul id="menu" class="lavaLamp">
-					<li class="current_page_item"><a href="index.html">Início</a></li>
+					<li class="current_page_item"><a href="index.php">Início</a></li>
 					<li class="page_item page-item-2357"><a href="portal.html">O Portal</a></li>
 					<li class="page_item page-item-2355"><a href="cadastro.html">Cadastre-se</a></li>
 					<li class="page_item page-item-2355"><a href="contato.html">Contato</a></li>
