@@ -13,6 +13,9 @@
 	<script src="scripts/js.js" type="text/javascript"></script>
 	<script src="scripts/jquery.cycle.all.js" type="text/javascript"></script>
 	
+	<script src="scripts/jquery.min.js" type="text/javascript"></script>
+	<script src="scripts/jquery.maskedinput.js" type="text/javascript"></script>
+	
 	<link rel="stylesheet" href="scripts/coin-slider-styles.css" type="text/css" />
 	
 	<script type="text/javascript">
@@ -22,6 +25,14 @@
 			pause: 1,
 		});
 	});
+	</script>
+	
+	<script type="text/javascript">  
+		jQuery.noConflict(); 
+		jQuery(function($){ 
+			$("#telefone").mask("(99) 9999-9999");
+			$("#usuario").mask("999.999.999-99");
+		}); 
 	</script>
 	
 	<script type="text/javascript">
@@ -127,7 +138,7 @@ require_once "conexao.php";
 							<a href="#" class="close">Fechar [X]</a><br />
 							
 							<div id="contactFormArea">
-								<form action="# method="post" id="cForm">
+								<form action="validacao.php" method="post" id="cForm">
 									<fieldset>
 										<div class="fields-form clearfix">
 											<div class="form-input">
@@ -141,9 +152,9 @@ require_once "conexao.php";
 											</div>
 											
 											<label>
-												<input class="button"  type="submit" name="submit" id="button" value="Login" tabindex="3" />												
+												<input class="button"  type="submit" name="login" id="login" value="Login" tabindex="3" />												
 											</label>
-											<a href="#/">Esqueci minha senha</a></h3>
+											<a href="esquecisenha.php">Esqueci minha senha</a></h3>
 																					
 										</div>										
 									</fieldset>
@@ -164,36 +175,37 @@ require_once "conexao.php";
 	
 
 
-<!-- SLIDES CONTAINER -->
- <div id="slides_container"> 
-	<div id="teste" width="300px" style="float: left; padding-left: 2em; padding:30px 0px 0px 0px;">
-		<!--<img src="images/img/projeto_casa.jpg"></a>-->
+	<!-- SLIDES CONTAINER -->
+	 <div id="slides_container"> 
+		<div id="teste" width="300px" style="float: left; padding-left: 2em; padding:30px 0px 0px 0px;">
+			<!--<img src="images/img/projeto_casa.jpg"></a>-->
+			
+			<div id="headertext"> 
+				<p style="font-family:arial;color:white;font-size:30px;">Aqui você encontra todos os</p>
+				<p style="font-family:arial;color:white;font-size:30px;">profissionais que precisa para</p>
+				<p style="font-family:arial;color:white;font-size:30px;">construir ou reformar sua casa.</p>
+				<p style="font-family:arial;color:white;font-size:30px;">  </p>
+				<p style="font-family:arial;color:white;font-size:30px;"><br>Clique e confira!!!</br></p>
+			</div>		
 		
-		<div id="headertext"> 
-			<p style="font-family:arial;color:white;font-size:30px;">Aqui você encontra todos os</p>
-			<p style="font-family:arial;color:white;font-size:30px;">profissionais que precisa para</p>
-			<p style="font-family:arial;color:white;font-size:30px;">construir ou reformar sua casa.</p>
-			<p style="font-family:arial;color:white;font-size:30px;">  </p>
-			<p style="font-family:arial;color:white;font-size:30px;"><br>Clique e confira!!!</br></p>
-		</div>		
-	
-	</div>
-	
-	<div id="slider">  
+		</div>
 		
-		<img src="images/img/projeto_casa.jpg"></a>
-		<img src="images/img/esboco_interno.jpg"></a>			
-		<img src="images/img/casa_pronta.jpg"></a>
-		<img src="images/img/casa_pronta4.jpg"></a>
-		<img src="images/img/telhado.jpg"></a>
-		<img src="images/img/pintura_interna.jpg"></a>
-		<img src="images/img/parte_interna.jpg"></a>			
-	
-	</div><!-- end of slider -->
-	
-  </div> 
-  
-<!-- END OF SLIDES CONTAINER -->
+		<div id="slider">  
+			
+			<img src="images/img/projeto_casa.jpg"></a>
+			<img src="images/img/esboco_interno.jpg"></a>			
+			<img src="images/img/casa_pronta.jpg"></a>
+			<img src="images/img/paisagem2.jpg"></a>		
+			<img src="images/img/telhado.jpg"></a>
+			<img src="images/img/casa.jpg"></a>
+			<img src="images/img/interior2.jpg"></a>
+			<img src="images/img/paisagem3.jpg"></a>			
+		
+		</div><!-- end of slider -->
+		
+	  </div> 
+	  
+	<!-- END OF SLIDES CONTAINER -->
 
 <!-- BEGIN CONTENT -->
 
@@ -279,6 +291,8 @@ require_once "conexao.php";
 							while($linha = mysql_fetch_assoc($resultado_dicas)):
 								$nome = $linha['nome'];
 								$profissao = $linha['profissao'];
+								if($profissao == "Engenheiro" || $profissao == "Arquiteto")
+									$profissao.="(a)";
 								$dica = $linha['dica'];					
 					?>
 						<div class="dica">
@@ -358,7 +372,7 @@ require_once "conexao.php";
 
 				</div><!-- end of maintext -->
 			</div><!-- end of main -->
-						<div id="side">
+			<div id="side">
 				<div class="sidebox">
 					<div class="c_bottomsidebox">
 						<!--<div class="contentbox">
@@ -384,7 +398,7 @@ require_once "conexao.php";
 					</div>
 				</div><!-- end of sidebox -->
 			</div><!-- end of side -->
-					</div><!-- end of maincontent -->
+		</div><!-- end of maincontent -->
 	</div>
 	</div>
 <!-- END OF CONTENT -->

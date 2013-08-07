@@ -35,6 +35,7 @@
 		jQuery.noConflict(); 
 		jQuery(function($){ 
 			$("#telefone").mask("(99) 9999-9999");
+			$("#usuario").mask("999.999.999-99");
 		}); 
 	</script>
 	
@@ -144,7 +145,7 @@
 							<a href="#" class="close">Fechar [X]</a><br />
 							
 							<div id="contactFormArea">
-								<form action="# method="post" id="cForm">
+								<form action="validacao.php" method="post" id="cForm">
 									<fieldset>
 										<div class="fields-form clearfix">
 											<div class="form-input">
@@ -160,7 +161,7 @@
 											<label>
 												<input class="button"  type="submit" name="submit" id="button" value="Login" tabindex="3" />												
 											</label>
-											<a href="#/">Esqueci minha senha</a></h3>
+											<a href="esquecisenha.php">Esqueci minha senha</a></h3>
 																					
 										</div>										
 									</fieldset>
@@ -201,10 +202,11 @@
 		<img src="images/img/projeto_casa.jpg"></a>
 		<img src="images/img/esboco_interno.jpg"></a>			
 		<img src="images/img/casa_pronta.jpg"></a>
-		<img src="images/img/casa_pronta4.jpg"></a>
+		<img src="images/img/paisagem2.jpg"></a>		
 		<img src="images/img/telhado.jpg"></a>
-		<img src="images/img/pintura_interna.jpg"></a>
-		<img src="images/img/parte_interna.jpg"></a>			
+		<img src="images/img/casa.jpg"></a>
+		<img src="images/img/interior2.jpg"></a>
+		<img src="images/img/paisagem3.jpg"></a>			
 	
 	</div><!-- end of slider -->
 	

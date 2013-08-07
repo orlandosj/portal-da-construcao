@@ -836,6 +836,20 @@ ul.thumb li img {
 
 .oculto{display: none;}
 
+#updateinfo{
+	width:280px; 
+	float:left; 
+	padding-left:0px;
+	color: #E07E29;
+	font-size: 24px;
+	font-weight: normal;	
+}
+
+/*#sideupdateinfo{width:280px; float:left; padding-left:0px;}
+.sideboxupdateinfo{background-image:url(../images/c_top.gif); background-repeat:no-repeat; background-position:top; background-color:#ededed}
+.c_bottomsideboxupdateinfo{background-image:url(../images/c_bottom.gif); background-repeat:no-repeat; background-position:bottom;}
+.sidetextupdateinfo{padding:10px 22px 25px 18px;}*/
+
 /*** end of mousehover ***/
 
 
