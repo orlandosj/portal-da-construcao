@@ -38,7 +38,8 @@
 		jQuery(function($){ 
 		$("#telefone").mask("(99) 9999-9999");
 		$("#telefone2").mask("(99) 9999-9999");		
-		$("#cpf").mask("999.999.999-99");		  		
+		$("#cpf").mask("999.999.999-99");
+		$("#usuario").mask("999.999.999-99");		
 		}); 
 	</script>
 	
@@ -115,23 +116,30 @@
 	<script charset="utf-8" src="scripts/slider.js" type="text/javascript"></script>
 
 <?php
-/*Página para CRUD de comentários*/
+/*Página para cadastro de profissionais*/
 require_once "conexao.php";
 	
 	function cadProfissional($nome, $cpf, $email, $telefone, $telefone2, $senha, $profissao, $estado, 
 							$cidade, $servicos, $info, $data){
 		conectar();
 		
+		$nome = strtolower($nome);
+		$nome = ucwords($nome);
+		
+		$email = strtolower($email);
+		
 		if($telefone2 == "")
 			$telefone2 = NULL;
+			
+		$senha = sha1(md5($senha));
 	
 		$consulta = "INSERT INTO profissionais (nome, cpf, email, telefone, telefone_alternativo, 
 												senha, profissao, estado, cidade, servicos, informacoes, data_cadastro)
-					 VALUES ('$nome', '$cpf', '$email', '$telefone', '$telefone2', password('$senha'), '$profissao', '$estado', 
+					 VALUES ('$nome', '$cpf', '$email', '$telefone', '$telefone2', '$senha', '$profissao', '$estado', 
 							'$cidade', '$servicos', '$info', '$data')";
 		$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução!\");</script>");	
 		
-		echo "<script>alert('Cadastro realizado com sucesso! Faça login para colocar fotos dos seus trabalhos, dar dicas ou alterar seus dados!')</script>";
+		echo "<script>alert('Cadastro realizado com sucesso!')</script>";
 		
 	
 	}
@@ -184,7 +192,7 @@ require_once "conexao.php";
 							<a href="#" class="close">Fechar [X]</a><br />
 							
 							<div id="contactFormArea">
-								<form action="# method="post" id="cForm">
+								<form action="validacao.php" method="post" id="cForm">
 									<fieldset>
 										<div class="fields-form clearfix">
 											<div class="form-input">
@@ -201,7 +209,7 @@ require_once "conexao.php";
 												<input class="button"  type="submit" name="submit" id="button" value="Login" tabindex="" />
 												<a rel="nofollow" id="cancel-comment-reply-link" href="/2010/05/desarrollo-de-widgets/#respond" style="display:none;">Click here to cancel reply.</a>  
 											</label>
-											<a href="#/">Esqueci minha senha</a></h3>
+											<a href="esquecisenha.php">Esqueci minha senha</a></h3>
 																					
 										</div>										
 									</fieldset>
@@ -241,10 +249,11 @@ require_once "conexao.php";
 		<img src="images/img/projeto_casa.jpg"></a>
 		<img src="images/img/esboco_interno.jpg"></a>			
 		<img src="images/img/casa_pronta.jpg"></a>
-		<img src="images/img/casa_pronta4.jpg"></a>
+		<img src="images/img/paisagem2.jpg"></a>		
 		<img src="images/img/telhado.jpg"></a>
-		<img src="images/img/pintura_interna.jpg"></a>
-		<img src="images/img/parte_interna.jpg"></a>			
+		<img src="images/img/casa.jpg"></a>
+		<img src="images/img/interior2.jpg"></a>
+		<img src="images/img/paisagem3.jpg"></a>			
 	
 	</div><!-- end of slider -->
 	
@@ -309,7 +318,7 @@ require_once "conexao.php";
 					
 					<div id="portal">
 						Obrigado por efetuar seu cadastro no Portal da Construção. Agora você pode dar dicas sobre
-						a área em que atua, colocar fotos de trabalhos realizados e ainda atualizar seus dados quando 
+						a área em que atua, alterar sua senha e ainda atualizar seus dados quando 
 						necessário. Faça login e verifique sua página de serviços.
 					</div>
 					
@@ -355,15 +364,15 @@ require_once "conexao.php";
 									<label for="profissao">Profissão:</label>
 									<select required aria-required="true" class="dropdownlist" name="profissao" id="profissao" tabindex="8"> 
 											<option selected value="">Selecione a profissão</option>
-											<option value="arquiteto">Arquiteto</option>
-											<option value="carpinteiro">Carpinteiro</option>
-											<option value="eletricista">Eletricista</option>
-											<option value="encanador">Encanador</option>
-											<option value="engenheiro">Engenheiro</option>
-											<option value="paisagista">Paisagista</option>
-											<option value="pedreiro">Pedreiro</option>
-											<option value="pintor">Pintor</option>										
-											<option value="serralheiro">Serralheiro</option>											
+											<option value="Arquiteto">Arquiteto</option>
+											<option value="Carpinteiro">Carpinteiro</option>
+											<option value="Eletricista">Eletricista</option>
+											<option value="Encanador">Encanador</option>
+											<option value="Engenheiro">Engenheiro</option>
+											<option value="Paisagista">Paisagista</option>
+											<option value="Pedreiro">Pedreiro</option>
+											<option value="Pintor">Pintor</option>										
+											<option value="Serralheiro">Serralheiro</option>											
 									</select>
 									<span class="hint">Selecione a sua profissão</span><br /><br />
 									

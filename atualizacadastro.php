@@ -38,7 +38,8 @@
 		jQuery(function($){ 
 		$("#telefone").mask("(99) 9999-9999");
 		$("#telefone2").mask("(99) 9999-9999");		
-		$("#cpf").mask("999.999.999-99");		  		
+		$("#cpf").mask("999.999.999-99");
+		$("#usuario").mask("999.999.999-99");		
 		}); 
 	</script>
 	
@@ -90,34 +91,67 @@
 	</script>
 	
 	<script>
-	function validarSenha(){
-		senha1 = document.cadastro.senha.value
-		senha2 = document.cadastro.confirmasenha.value
-	 
-		if (senha1 != senha2){
-			alert("Os campos senha e confirmação de senha devem ser iguais")
-			document.cadastro.confirmasenha.select();
-			document.cadastro.confirmasenha.focus();			
+		function validarSenha(){
+			senha1 = document.updatesenha.senhanova.value
+			senha2 = document.updatesenha.confirmasenha.value
+		 
+			if (senha1 != senha2){
+				alert("Os campos senha e confirmação de senha devem ser iguais")
+				document.updatesenha.confirmasenha.select();
+				document.updatesenha.confirmasenha.focus();			
+			}
 		}
-	}
 	</script>
 	
-	<script>
-	function validarTamanhoSenha(){
-		senha = document.cadastro.senha.value
-		if (senha.length < "6"){
-			alert("A senha deve conter pelo menos 6 caracteres")
-			document.cadastro.senha.focus();						
+	<script>	
+		function validarTamanhoSenha(){
+			senhanova = document.updatesenha.senhanova.value
+			if (senhanova.length < "6"){
+				alert("A senha deve conter pelo menos 6 caracteres")
+				document.updatesenha.senhanova.focus();						
+			}
 		}
-	}
+	</script>		
+	<script>
+		function validarSenhaAntiga(){
+			senha = document.updatesenha.senhaantiga.value;
+			id = $_SESSION['ProfissionalID'];
+			jQuery.noConflict(); 
+			jQuery(function($){
+				$("#senhaantiga").load('verificasenha.php',{id: id, senha: senha});					
+			});
+		}
 	</script>
 	
 	<script charset="utf-8" src="scripts/slider.js" type="text/javascript"></script>
 
 <?php
-/*Página para CRUD de comentários*/
-require_once "conexao.php";
+
+	// A sessão precisa ser iniciada em cada página diferente
+	if (!isset($_SESSION)) 
+		session_start();
+
+	// Verifica se não há a variável da sessão que identifica o usuário
+	if (!isset($_SESSION['ProfissionalID'])) {
+		// Destrói a sessão por segurança
+		session_destroy();
+		// Redireciona o visitante de volta pro login
+		header("Location: index.php"); exit;
+	}
 	
+	require_once "conexao.php";
+
+	conectar();
+	
+	$id = $_SESSION['ProfissionalID'];
+ 
+	/* monta a instrucao SQL*/
+	$strSql = "SELECT * FROM profissionais WHERE id = $id";
+ 
+	/* executa a query*/
+	$query = mysql_query($strSql) or die("<script language=JavaScript>alert(\"Não foi possível carregar os dados!\");</script>");
+	 
+	$result = mysql_fetch_assoc($query);
 	
 	
 	function updateProfissional($id, $email, $telefone, $telefone2, $estado, $cidade, $servicos, $info){
@@ -125,24 +159,24 @@ require_once "conexao.php";
 		
 		if($telefone2 == "")
 			$telefone2 = NULL;
+			
+		$email = strtolower($email);
 	
 		$consulta = "UPDATE profissionais  SET email = '$email', telefone = '$telefone', telefone_alternativo = '$telefone2', 
 												estado = '$estado', cidade = '$cidade', servicos = '$servicos', 
-												informacoes = '$info' WHERE id = '$id')";
+												informacoes = '$info' WHERE id = '$id'";
 		$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução!\");</script>");	
 		
 		echo "<script>alert('Dados alterados com sucesso!')</script>";
-		
-	
-	}
+	}		
 
-	if(isset($_POST["atualiar"])){
+	if(isset($_POST["atualizar"])){
+		$id = $_SESSION['ProfissionalID'];
 		$nome = $_POST["author"];
 		$cpf = $_POST["cpf"];
 		$email = $_POST["email"];
 		$telefone = $_POST["telefone"];
 		$telefone2 = $_POST["telefone2"];
-		$senha = $_POST["senha"];
 		$profissao = $_POST["profissao"];
 		$estado = $_POST["estado"];
 		$cidade = $_POST["cidade"];
@@ -151,6 +185,40 @@ require_once "conexao.php";
 		$data =  date('Y-m-d H:i:s');
 		updateProfissional($id, $email, $telefone, $telefone2, $estado, $cidade, $servicos, $info);		
 	}	
+
+	function updateSenha($id, $senha){
+		conectar();
+		
+		$senha = sha1(md5($senha));
+		
+		$consulta = "UPDATE profissionais  SET senha = '$senha' WHERE id = '$id'";
+		$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução!\");</script>");	
+		
+		echo "<script>alert('Senha alterada com sucesso!')</script>";
+	}
+	
+	if(isset($_POST["alterarsenha"])){
+		$id = $_SESSION['ProfissionalID'];
+		$senha = $_POST["senhanova"];
+		updateSenha($id, $senha);		
+	}
+	
+	function enviarDica($id, $dica, $status, $data){
+		conectar();
+		
+		$consulta = "INSERT INTO dicas (id_profissional, dica, status, data)  VALUES ('$id', '$dica', '$status', '$data')";
+		$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução!\");</script>");	
+		
+		echo "<script>alert('Dica enviada com sucesso!')</script>";
+	}
+	
+	if(isset($_POST["enviardica"])){
+		$id = $_SESSION['ProfissionalID'];
+		$dica = $_POST["dica"];
+		$status = 1;
+		$data =  date('Y-m-d H:i:s');
+		enviarDica($id, $dica, $status, $data);		
+	}
 ?>	
 	
 <body class="home blog" data-twttr-rendered="true">
@@ -172,7 +240,7 @@ require_once "conexao.php";
 					<li class="page_item page-item-2357"><a href="portal.html">O Portal</a></li>
 					<li class="page_item page-item-2355"><a href="cadastro.html">Cadastre-se</a></li>
 					<li class="page_item page-item-2355"><a href="contato.html">Contato</a></li>
-					<li class="page_item page-item-7"><a href="#dialog" name="modal">Login</a></li>	
+					<li class="page_item page-item-7"><a href="logout.php">Logoff</a></li>	
 
 					<div id="boxes">
  
@@ -182,7 +250,7 @@ require_once "conexao.php";
 							<a href="#" class="close">Fechar [X]</a><br />
 							
 							<div id="contactFormArea">
-								<form action="# method="post" id="cForm">
+								<form action="validacao.php" method="post" id="cForm">
 									<fieldset>
 										<div class="fields-form clearfix">
 											<div class="form-input">
@@ -199,7 +267,7 @@ require_once "conexao.php";
 												<input class="button"  type="submit" name="submit" id="button" value="Login" tabindex="" />
 												<a rel="nofollow" id="cancel-comment-reply-link" href="/2010/05/desarrollo-de-widgets/#respond" style="display:none;">Click here to cancel reply.</a>  
 											</label>
-											<a href="#/">Esqueci minha senha</a></h3>
+											<a href="esquecisenha.php">Esqueci minha senha</a></h3>
 																					
 										</div>										
 									</fieldset>
@@ -239,10 +307,11 @@ require_once "conexao.php";
 		<img src="images/img/projeto_casa.jpg"></a>
 		<img src="images/img/esboco_interno.jpg"></a>			
 		<img src="images/img/casa_pronta.jpg"></a>
-		<img src="images/img/casa_pronta4.jpg"></a>
+		<img src="images/img/paisagem2.jpg"></a>		
 		<img src="images/img/telhado.jpg"></a>
-		<img src="images/img/pintura_interna.jpg"></a>
-		<img src="images/img/parte_interna.jpg"></a>			
+		<img src="images/img/casa.jpg"></a>
+		<img src="images/img/interior2.jpg"></a>
+		<img src="images/img/paisagem3.jpg"></a>			
 	
 	</div><!-- end of slider -->
 	
@@ -252,140 +321,151 @@ require_once "conexao.php";
 		
 	<!-- BEGIN CONTENT -->
 	<div class="clearfix" id="content">
-	<div id="padding_content">
-		<div id="maincontent">
-			<div id="main">
-				<div id="maintext">
-
-					
-					
-					<div id="portal">
-						Abaixo você pode alterar os dados cadastrados, alterar sua senha, inserir fotos ou 
-						substituir as fotos cadastradas e dar dicas para os clientes sobre sua área de atuação.
-					</div>
-					
-					<p></p>
-					
-					<h2>Cadastro</h2>				
-					
-					<p></p>
-					
-					<div id="respond">
-						<div id="contactFormArea">
-							<form action="" method="post" id="update" name="update" >
-								<fieldset>
-									
-									<label for="author">Nome:</label>
-									<input class="inputcadastro" type="text" size="25" name="author" id="author" value="" tabindex="1" required/>
-									<span class="hint">Informe seu nome completo</span><br /><br />
-									
-									<label for="cpf">CPF:</label>
-									<input class="inputcadastro" type="text" name="cpf" id="cpf" value="" tabindex="2" required/>
-									<span class="hint">Informe seu CPF</span><br /><br />
-									
-									<label for="email">Email:</label>
-									<input class="inputcadastro" type="text" size="25" name="email" id="email" value="" tabindex="3" required/>
-									<span class="hint">Informe um email válido para que possamos entrar em contato. Este email não será compartilhado com ninguém.</span><br /><br />
-									
-									<label for="telefone">Telefone:</label>
-									<input class="inputcadastro" type="text" size="25" name="telefone" id="telefone" value="" tabindex="4" required/>
-									<span class="hint">Informe um telefone para contato</span><br /><br />
-									
-									<label for="telefone2">Telefone Alternativo:</label>
-									<input class="inputcadastro input-help" type="text" size="25" name="telefone2" id="telefone2" value="" tabindex="5" />
-									<span class="hint">Informe outro número de telefone para contato (não obrigatório)</span><br /><br />
-									
-									<label for="senha">Senha:</label>
-									<input class="inputcadastro input-help" type="password" size="25" name="senha" id="senha" value="" tabindex="6" onBlur="validarTamanhoSenha()"/>
-									<span class="hint">Escolha sua senha para acesso ao portal (deve ter pelo menos 6 caracteres)</span><br /><br />
-									
-									<label for="confirmasenha">Confirmação de Senha:</label>
-									<input class="inputcadastro input-help" type="password" size="25" name="confirmasenha" id="confirmasenha" value="" tabindex="7" onBlur="validarSenha()"/>
-									<span class="hint">Repita a senha escolhida para acesso ao portal</span><br /><br />
-									
-									<label for="profissao">Profissão:</label>
-									<select required aria-required="true" class="dropdownlist" name="profissao" id="profissao" tabindex="8"> 
-											<option selected value="">Selecione a profissão</option>
-											<option value="arquiteto">Arquiteto</option>
-											<option value="carpinteiro">Carpinteiro</option>
-											<option value="eletricista">Eletricista</option>
-											<option value="encanador">Encanador</option>
-											<option value="engenheiro">Engenheiro</option>
-											<option value="paisagista">Paisagista</option>
-											<option value="pedreiro">Pedreiro</option>
-											<option value="pintor">Pintor</option>										
-											<option value="serralheiro">Serralheiro</option>											
-									</select>
-									<span class="hint">Selecione a sua profissão</span><br /><br />
-									
-									<label for="estado">Estado:</label>
-									<select required aria-required="true" class="dropdownlist" name="estado" id="estado" tabindex="9"> 																																			
-										
-									</select>
-									<span class="hint">Selecione o estado no qual trabalha</span><br /><br />
-									
-									<label for="cidade">Cidade:</label>
-									<select required aria-required="true" class="dropdownlist" name="cidade" id="cidade" tabindex="10"> 
-										<option value="0">---Selecione primeiro o estado---</option>	
-									</select>
-									<span class="hint">Selecione a cidade na qual trabalha</span><br /><br/>
-
-									<label for="servico">Serviços prestados:</label>
-									<textarea class="inputtextarea" cols="60" rows="5" name="servicos" id="servicos" tabindex="11" required></textarea>
-									<span class="hint">Digite aqui os principais serviços que realiza, separados por vírgula</span><br /><br />
-									
-									<label for="info">Informações adicionais:</label>
-									<textarea class="inputtextarea" cols="60" rows="5" name="info" id="info" tabindex="12" ></textarea>
-									<span class="hint">Digite aqui outras informações relevantes a seus clientes (preenchimento não obrigatório)</span><br /><br />
-									<label>
-										<input class="button"  type="submit" name="atualizar" id="button" value="Atualizar" tabindex="13" />										
-									</label><br></br>
-													
-									
-																			
-								</fieldset>
-							</form>
-						</div>
-					</div>
-					
-					<br></br>
-					
-					<h2>Alterar senha (colocar em uma div no lugar dos anuncios)</h2>
-					
-					<br></br>
-					
-					<div id="senha">
-						<div id="formsenha">
-							<form action="" method="post" id="updatesenha" name="updatesenha" >
-								<fieldset>
-									
-									<label for="senha">Senha atual:</label>
-									<input class="inputcadastro input-help" type="password" size="25" name="senhaantiga" id="senhaantiga" value="" tabindex="1" onBlur="validarSenhaAntiga()"/>
-									<span class="hint">Informe a sua senha atual</span><br /><br />
-									
-									<label for="senha">Nova senha:</label>
-									<input class="inputcadastro input-help" type="password" size="25" name="senhanova" id="senhanova" value="" tabindex="2" onBlur="validarTamanhoSenha()"/>
-									<span class="hint">Informe a sua nova senha</span><br /><br />
-									
-									<label for="confirmasenha">Confirmação de Senha:</label>
-									<input class="inputcadastro input-help" type="password" size="25" name="confirmasenha" id="confirmasenha" value="" tabindex="3" onBlur="validarSenha()"/>
-									<span class="hint">Repita a nova senha escolhida para acesso ao portal</span><br /><br />								
-									
-									<label>
-										<input class="button"  type="submit" name="alterarsenha" id="button" value="Alterar senha" tabindex="4" />										
-									</label><br></br>
-													
-									
-																			
-								</fieldset>
-							</form>
-						</div>
-					</div>
-				</div><!-- end of maintext -->
-			</div><!-- end of main -->
+		<div id="padding_content">
+			<div id="portal">
+				Olá, <?php echo $_SESSION['ProfissionalNome']; ?>! <br></br>
+				Abaixo você pode alterar os dados cadastrados, alterar sua senha e dar dicas para os clientes sobre sua área de atuação.
+			</div>
+			<br></br>
 			
-		</div><!-- end of maincontent -->
-	</div>
+			<div id="maincontent">
+				<div id="main">
+					<div id="maintext">
+
+						<h2>Cadastro</h2>
+
+						<p></p>
+						
+						<div id="respond">
+							<div id="contactFormArea">
+								<form action="" method="post" id="update" name="update" >
+									<fieldset>
+										
+										<label for="author">Nome:</label>
+										<input class="inputcadastro" type="text" size="25" name="author" id="author" value="<?php echo $result['nome']; ?>" tabindex="1" readonly="readonly" required/>
+										<br></br>
+										
+										<label for="cpf">CPF:</label>
+										<input class="inputcadastro" type="text" name="cpf" id="cpf" value="<?php echo $result['cpf']; ?>" tabindex="2" readonly="readonly" required/>
+										<br /><br />
+										
+										<label for="email">Email:</label>
+										<input class="inputcadastro" type="text" size="25" name="email" id="email" value="<?php echo $result['email']; ?>" tabindex="3" required/>
+										<span class="hint">Informe um email válido para que possamos entrar em contato. Este email não será compartilhado com ninguém.</span><br /><br />
+										
+										<label for="telefone">Telefone:</label>
+										<input class="inputcadastro" type="text" size="25" name="telefone" id="telefone" value="<?php echo $result['telefone']; ?>" tabindex="4" required/>
+										<span class="hint">Informe um telefone para contato</span><br /><br />
+										
+										<label for="telefone2">Telefone Alternativo:</label>
+										<input class="inputcadastro input-help" type="text" size="25" name="telefone2" id="telefone2" value="<?php echo $result['telefone_alternativo']; ?>" tabindex="5" />
+										<span class="hint">Informe outro número de telefone para contato (não obrigatório)</span><br /><br />
+										
+										<label for="profissao">Profissão:</label>
+										<select required aria-required="true" class="dropdownlist" name="profissao" id="profissao" tabindex="6"> 
+												<option selected value="<?php echo $result['profissao']; ?>"><?php echo $result['profissao']; ?></option>
+												<!--<option value="arquiteto">Arquiteto</option>
+												<option value="carpinteiro">Carpinteiro</option>
+												<option value="eletricista">Eletricista</option>
+												<option value="encanador">Encanador</option>
+												<option value="engenheiro">Engenheiro</option>
+												<option value="paisagista">Paisagista</option>
+												<option value="pedreiro">Pedreiro</option>
+												<option value="pintor">Pintor</option>										
+												<option value="serralheiro">Serralheiro</option>-->											
+										</select>
+										<!--<span class="hint">Selecione a sua profissão</span>--><br /><br />
+										
+										<label for="estado">Estado:</label>
+										<select required aria-required="true" class="dropdownlist" name="estado" id="estado" tabindex="7" required> 																																			
+												
+										</select>
+										<span class="hint">Selecione o estado no qual trabalha</span><br /><br />
+										
+										<label for="cidade">Cidade:</label>
+										<select required aria-required="true" class="dropdownlist" name="cidade" id="cidade" tabindex="8"> 
+											<option value="">---Selecione primeiro o estado---</option>	
+										</select>
+										<span class="hint">Selecione a cidade na qual trabalha</span><br /><br/>
+
+										<label for="servico">Serviços prestados:</label>
+										<textarea class="inputtextarea" cols="60" rows="5" name="servicos" id="servicos" tabindex="9" required><?php echo $result['servicos'];?></textarea>
+										<span class="hint">Digite aqui os principais serviços que realiza, separados por vírgula</span><br /><br />
+										
+										<label for="info">Informações adicionais:</label>
+										<textarea class="inputtextarea" cols="60" rows="5" name="info" id="info" tabindex="10" ><?php echo $result['informacoes'];?></textarea>
+										<span class="hint">Digite aqui outras informações relevantes a seus clientes (preenchimento não obrigatório)</span><br /><br />
+										<label>
+											<input class="button"  type="submit" name="atualizar" id="atualizar" value="Atualizar" tabindex="11" />										
+										</label><br></br>
+														
+										
+																				
+									</fieldset>
+								</form>
+							</div>
+						</div>
+						
+						<br></br>
+						
+						
+					</div><!-- end of maintext -->
+				</div><!-- end of main -->
+				
+				<div id="senha" class="updateinfo">
+					<h2>Alterar senha</h2>				
+					<p></p>
+					
+					<div id="senha" class="boxsenha">
+					<form action="" method="post" id="updatesenha" name="updatesenha" >
+							<fieldset>
+								
+								<label for="senhaantiga">Senha atual:</label>
+								<input class="inputcadastro input-help" type="password" size="25" name="senhaantiga" id="senhaantiga" value="" tabindex="12" onBlur="validarSenhaAntiga()" required/>
+								<span class="hint">Informe a sua senha atual</span><br /><br />
+								
+								<label for="senhanova">Nova senha:</label>
+								<input class="inputcadastro input-help" type="password" size="25" name="senhanova" id="senhanova" value="" tabindex="13" onBlur="validarTamanhoSenha()" required/>
+								<span class="hint">Informe a sua nova senha</span><br /><br />
+								
+								<label for="confirmasenha">Confirmação de Senha:</label>
+								<input class="inputcadastro input-help" type="password" size="25" name="confirmasenha" id="confirmasenha" value="" tabindex="14" onBlur="validarSenha()" required/>
+								<span class="hint">Repita a nova senha escolhida para acesso ao portal</span><br /><br />								
+								
+								<label>
+									<input class="button"  type="submit" name="alterarsenha" id="alterarsenha" value="Alterar senha" tabindex="15" />										
+								</label><br></br>							
+																		
+							</fieldset>
+						</form>						
+					</div>
+					
+					<br></br>	
+
+					<h2>Dica do especialista</h2>				
+					<p></p>
+					
+					<div id="dica" class="boxsenha">
+					<form action="" method="post" id="dica" name="dica" >
+							<fieldset>
+								
+								<label for="dica">Dica:</label>
+										<textarea class="inputtextarea" cols="44" rows="7" name="dica" id="dica" tabindex="16" required></textarea>
+										<span class="hint">Digite aqui uma dica para seus possíveis clientes sobre sua área de atuação</span><br /><br />								
+								
+								<label>
+									<input class="button"  type="submit" name="enviardica" id="enviardica" value="Enviar dica" tabindex="17" />										
+								</label><br></br>							
+																		
+							</fieldset>
+						</form>						
+					</div>
+				</div><!-- end of updateinfo -->
+				
+			</div><!-- end of maincontent -->	
+			
+		</div> <!-- end of paddingcontent -->	
+	
 	</div>
 <!-- END OF CONTENT -->
 					

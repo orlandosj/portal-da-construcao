@@ -38,7 +38,8 @@
 		jQuery(function($){ 
 		$("#telefone").mask("(99) 9999-9999");
 		$("#telefone2").mask("(99) 9999-9999");		
-		$("#cpf").mask("999.999.999-99");		  		
+		$("#cpf").mask("999.999.999-99");
+		$("#usuario").mask("999.999.999-99");
 		}); 
 	</script>
 	
@@ -188,9 +189,23 @@
 				alert(erro);
 				cpf.focus();
 				return false;
-		} 	
+		}		
 		return true;	
 	 }	 
+	</script>
+	
+	<script>
+	function verificaCPF(cpf){		
+		var c = cpf.value;
+		if(validaCPF(cpf))	
+			verificaCPFExiste(c);
+	}
+	
+	function verificaCPFExiste(cpf){
+		jQuery(function($){
+			$("#cpf").load('verificacpf.php',{cpf: cpf});					
+		});
+	}
 	</script>
 	
 	<script charset="utf-8" src="scripts/slider.js" type="text/javascript"></script>	
@@ -241,7 +256,7 @@
 												<input class="button"  type="submit" name="submit" id="button" value="Login" tabindex="" />
 												<a rel="nofollow" id="cancel-comment-reply-link" href="/2010/05/desarrollo-de-widgets/#respond" style="display:none;">Click here to cancel reply.</a>  
 											</label>
-											<a href="#/">Esqueci minha senha</a></h3>
+											<a href="esquecisenha.php">Esqueci minha senha</a></h3>
 																					
 										</div>										
 									</fieldset>
@@ -281,10 +296,11 @@
 		<img src="images/img/projeto_casa.jpg"></a>
 		<img src="images/img/esboco_interno.jpg"></a>			
 		<img src="images/img/casa_pronta.jpg"></a>
-		<img src="images/img/casa_pronta4.jpg"></a>
+		<img src="images/img/paisagem2.jpg"></a>		
 		<img src="images/img/telhado.jpg"></a>
-		<img src="images/img/pintura_interna.jpg"></a>
-		<img src="images/img/parte_interna.jpg"></a>			
+		<img src="images/img/casa.jpg"></a>
+		<img src="images/img/interior2.jpg"></a>
+		<img src="images/img/paisagem3.jpg"></a>			
 	
 	</div><!-- end of slider -->
 	
@@ -364,7 +380,7 @@
 									<span class="hint">Informe seu nome completo</span><br /><br />
 									
 									<label for="cpf">CPF:</label>
-									<input class="inputcadastro" type="text" name="cpf" id="cpf" value="" tabindex="2" onBlur="validaCPF(this);" required/>
+									<input class="inputcadastro" type="text" name="cpf" id="cpf" value="" tabindex="2" onBlur="verificaCPF(this);" required/>
 									<span class="hint">Informe seu CPF</span><br /><br />
 									
 									<label for="email">Email:</label>
@@ -390,15 +406,15 @@
 									<label for="profissao">Profissão:</label>
 									<select required aria-required="true" class="dropdownlist" name="profissao" id="profissao" tabindex="8"> 
 											<option selected value="">Selecione a profissão</option>
-											<option value="arquiteto">Arquiteto</option>
-											<option value="carpinteiro">Carpinteiro</option>
-											<option value="eletricista">Eletricista</option>
-											<option value="encanador">Encanador</option>
-											<option value="engenheiro">Engenheiro</option>
-											<option value="paisagista">Paisagista</option>
-											<option value="pedreiro">Pedreiro</option>
-											<option value="pintor">Pintor</option>										
-											<option value="serralheiro">Serralheiro</option>
+											<option value="Arquiteto">Arquiteto</option>
+											<option value="Carpinteiro">Carpinteiro</option>
+											<option value="Eletricista">Eletricista</option>
+											<option value="Encanador">Encanador</option>
+											<option value="Engenheiro">Engenheiro</option>
+											<option value="Paisagista">Paisagista</option>
+											<option value="Pedreiro">Pedreiro</option>
+											<option value="Pintor">Pintor</option>										
+											<option value="Serralheiro">Serralheiro</option>
 									</select>
 									<span class="hint">Selecione a sua profissão</span><br /><br />
 									
