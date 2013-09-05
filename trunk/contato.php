@@ -94,12 +94,17 @@
 		
 		function cadMensagem($nome, $email, $telefone, $assunto, $mensagem, $hora){
 			conectar();
+			
+			$nome = strtolower($nome);
+			$nome = ucwords($nome);
+			
+			$email = strtolower($email);
 		
 			$consulta = "INSERT INTO mensagens (nome_contato, email_contato, telefone_contato, assunto, mensagem, data)
 						 VALUES ('$nome', '$email', '$telefone', '$assunto', '$mensagem', '$hora')";
 			$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução!\");</script>");	
 			
-			echo "<script>alert('Mensagem enviada com sucesso! Em breve entraremos em contato!')</script>";
+			echo "<script>alert('Mensagem enviada com sucesso! Em breve entraremos em contato!'); location = 'index.php';</script>";
 			
 		
 		}	
@@ -114,6 +119,12 @@
 			cadMensagem($nome, $email, $telefone, $assunto, $mensagem, $hora);		
 		}
 		
+		/*** Imagens de anunciantes ***/
+		conectar();
+		$result=mysql_query("SELECT id, url, imagem, tipo FROM anunciantes WHERE status = 1") or die("<script language=JavaScript>alert(\"Falha na exibição das imagens dos anunciantes!\");</script>"); 
+	
+		/*** End of imagens de anunciantes ***/
+		
 	?>
 
 <body class="home blog" data-twttr-rendered="true">
@@ -125,16 +136,16 @@
 		<div id="top">
 			<div id="logo">
 				<div id="pad_logo">
-					<h2>PORTAL DA CONSTRUÇÃO</h2>
+					<h2>FERAS DA CONSTRUÇÃO</h2>
 				</div>
 			</div><!-- end of logo -->
 			<div id="topmenu">
 				<div id="nav">
 				  <ul id="menu" class="lavaLamp">
 					<li class="current_page_item"><a href="index.php">Início</a></li>
-					<li class="page_item page-item-2357"><a href="portal.html">O Portal</a></li>
-					<li class="page_item page-item-2355"><a href="cadastro.html">Cadastre-se</a></li>
-					<li class="page_item page-item-2355"><a href="contato.html">Contato</a></li>
+					<li class="page_item page-item-2357"><a href="portal.php">O Portal</a></li>
+					<li class="page_item page-item-2355"><a href="formcadastro.php">Cadastre-se</a></li>
+					<li class="page_item page-item-2355"><a href="formcontato.php">Contato</a></li>
 					<li class="page_item page-item-7"><a href="#dialog" name="modal">Login</a></li>	
 
 					<div id="boxes">
@@ -219,44 +230,44 @@
 	<div id="padding_content">
 		<div class="clearfix" id="topcontent">
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/arquiteto.jpg">
-			<h3><a href="profissionais.php">Arquitetos e Engenheiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Arquiteto">Arquitetos e Engenheiros</a></h3>
 			<p>Escolha o profissional para projetar sua casa</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/pedreiro.jpg">
-			<h3><a href="#">Pedreiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Pedreiro">Pedreiros</a></h3>
 			<p>Escolha o profissional para executar sua obra</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/carpinteiro.jpg">
-			<h3><a href="#">Carpinteiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Carpinteiro">Carpinteiros</a></h3>
 			<p>Escolha o profissional para fazer seu telhado</p>
 			</div>
 			<div class="linetop"></div>			
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/eletricista.jpg">
-			<h3><a href="#">Eletricistas</a></h3>
+			<h3><a href="profissionais.php?profissao=Eletricista">Eletricistas</a></h3>
 			<p>Escolha o profissional para realizar seu projeto elétrico</p>
 			</div>		
 			
 			<div><img alt="" src="images/prof/separador2.png"> </div>
 			
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/encanador.jpg">
-			<h3><a href="#">Encanadores</a></h3>
+			<h3><a href="profissionais.php?profissao=Encanador">Encanadores</a></h3>
 			<p>Escolha o profissional para cuidar da parte hidráulica</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/serralheiro.jpg">
-			<h3><a href="#">Serralheiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Serralheiro">Serralheiros</a></h3>
 			<p>Escolha o profissional para fazer portões, janelas, etc</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/pintor.jpg">
-			<h3><a href="#">Pintores</a></h3>
+			<h3><a href="profissionais.php?profissao=Pintor">Pintores</a></h3>
 			<p>Escolha o profissional para pintar sua casa</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/paisagista.jpg">
-			<h3><a href="#">Paisagistas</a></h3>
+			<h3><a href="profissionais.php?profissao=Paisagista">Paisagistas</a></h3>
 			<p>Escolha o profissional para fazer seu jardim</p>
 			</div>			
 		</div><!-- end of topcontent -->
@@ -278,14 +289,14 @@
 					<p></p>
 					
 					<div id="portal">
-						Deseja saber mais alguma informação sobre o Portal da Construção? Preencha o formulário abaixo e entraremos em contato.
+						Deseja saber mais alguma informação sobre o Portal Feras da Construção? Preencha o formulário abaixo e entraremos em contato.
 					</div>
 					
 					<p></p>
 					
 					<div id="respond">
 						<div id="contactFormArea">
-							<form action="# method="post" id="cForm">
+							<form action="contato.php" method="post" id="cForm">
 								<fieldset>
 									<label for="author">Nome:</label>
 									<input class="inputcadastro" type="text" size="25" name="author" id="author" value="" tabindex="1" required/>
@@ -312,12 +323,8 @@
 									<textarea cols="50" rows="6" name="comment" id="comment" class="inputtextarea" tabindex="5" required></textarea>
 									<span class="hint">Digite a sua mensagem. Em breve entraremos em contato</span><br /><br />
 									<label>
-										<input class="button"  type="submit" name="submit" id="button" value="Enviar" tabindex="6" />										
-									</label>
-													
-									<input type='hidden' name='comment_post_ID' value='2374' id='comment_post_ID' />
-									<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
-									<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="8d90ccd5ef" /></p>	
+										<input class="button"  type="submit" name="submit" id="button" value="Enviar" tabindex="6" />									
+									</label>									
 								</fieldset>
 							</form>
 						</div>
@@ -334,19 +341,38 @@
 						</div>-->
 						<div id="anuncios" class="sidetext">
 									<h2>Parceiros</h2>
+									
 									<ul class="advertisers clearfix">
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>																				
+									<?php
+										if($result):
+											while ($campo = mysql_fetch_assoc($result)):
+												$id   = $campo["id"]; 
+												$foto = $campo["imagem"];
+												$tipo = $campo["tipo"];
+												$url = $campo["url"];
+												//print $foto;
+												if($url != null):
+									?>			
+												<li><a href="<?php echo $url;?>"><img class="imgleft" alt="" src="<?php echo "visualiza_imagem_foto.php?id=".$id;?>" width="145px" height="145px"></a></li>
+												
+									<?php		else:?>			
+												<li><img class="imgleft" alt="" src="<?php echo "visualiza_imagem_foto.php?id=".$id;?>" width="145px" height="145px"></li>
+												
+									<?php		endif;
+											endwhile;  
+										endif; 
+									?>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>																				
 									</ul>
-								</div><!-- end of sidetext -->
+						</div><!-- end of sidetext -->
 					</div>
 				</div><!-- end of sidebox -->
 			</div><!-- end of side -->
@@ -366,14 +392,14 @@
 					<div class="footleft">
 						<h3>Copyright &amp; Usage
 </h3>
-						<p>O conteúdo deste site é protegido por Portal da Construção, sendo proibido publicar nossas informações em outro meio sem autorização prévia.
+						<p>O conteúdo deste site é protegido por Feras da Construção, sendo proibido publicar nossas informações em outro meio sem autorização prévia.
 </p>
-						<p>Copyright &copy; 2013. Portal da Construção</p>
+						<p>Copyright &copy; 2013. Feras da Construção</p>
 					</div><!-- end of footleft -->
 					<div class="footleft">
 						<h3>Advertise here
 </h3>
-						<p>O Portal da Construção não se responsabiliza pelas informações fornecidas pelos profissionais cadastrados.
+						<p>O Portal Feras da Construção não se responsabiliza pelas informações fornecidas pelos profissionais cadastrados.
 							<!--<a href="#/">contact us
 							</a>.--></p>
 					</div><!-- end of footleft -->
