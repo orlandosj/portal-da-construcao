@@ -113,19 +113,28 @@
 		}
 	</script>		
 	<script>
-		function validarSenhaAntiga(){
+		function validarSenhaAntiga(id){
+			document.getElementById("senhanova").disabled = true;
 			senha = document.updatesenha.senhaantiga.value;
-			id = $_SESSION['ProfissionalID'];
 			jQuery.noConflict(); 
 			jQuery(function($){
 				$("#senhaantiga").load('verificasenha.php',{id: id, senha: senha});					
-			});
+			});			
 		}
 	</script>
 	
 	<script charset="utf-8" src="scripts/slider.js" type="text/javascript"></script>
 
 <?php
+
+	/* Define o limitador de cache para 'private' */
+	session_cache_limiter('private');
+	$cache_limiter = session_cache_limiter();
+
+	/* Define o limite de tempo do cache em 30 minutos */
+	session_cache_expire(1);
+	$cache_expire = session_cache_expire();
+
 
 	// A sessão precisa ser iniciada em cada página diferente
 	if (!isset($_SESSION)) 
@@ -143,10 +152,10 @@
 
 	conectar();
 	
-	$id = $_SESSION['ProfissionalID'];
+	$id_ = $_SESSION['ProfissionalID'];
  
 	/* monta a instrucao SQL*/
-	$strSql = "SELECT * FROM profissionais WHERE id = $id";
+	$strSql = "SELECT * FROM profissionais WHERE id = $id_";
  
 	/* executa a query*/
 	$query = mysql_query($strSql) or die("<script language=JavaScript>alert(\"Não foi possível carregar os dados!\");</script>");
@@ -171,7 +180,6 @@
 	}		
 
 	if(isset($_POST["atualizar"])){
-		$id = $_SESSION['ProfissionalID'];
 		$nome = $_POST["author"];
 		$cpf = $_POST["cpf"];
 		$email = $_POST["email"];
@@ -183,7 +191,7 @@
 		$servicos = $_POST["servicos"];
 		$info = $_POST["info"];
 		$data =  date('Y-m-d H:i:s');
-		updateProfissional($id, $email, $telefone, $telefone2, $estado, $cidade, $servicos, $info);		
+		updateProfissional($id_, $email, $telefone, $telefone2, $estado, $cidade, $servicos, $info);		
 	}	
 
 	function updateSenha($id, $senha){
@@ -198,9 +206,8 @@
 	}
 	
 	if(isset($_POST["alterarsenha"])){
-		$id = $_SESSION['ProfissionalID'];
 		$senha = $_POST["senhanova"];
-		updateSenha($id, $senha);		
+		updateSenha($id_, $senha);		
 	}
 	
 	function enviarDica($id, $dica, $status, $data){
@@ -213,11 +220,10 @@
 	}
 	
 	if(isset($_POST["enviardica"])){
-		$id = $_SESSION['ProfissionalID'];
 		$dica = $_POST["dica"];
 		$status = 1;
 		$data =  date('Y-m-d H:i:s');
-		enviarDica($id, $dica, $status, $data);		
+		enviarDica($id_, $dica, $status, $data);		
 	}
 ?>	
 	
@@ -230,16 +236,16 @@
 		<div id="top">
 			<div id="logo">
 				<div id="pad_logo">
-					<h2>PORTAL DA CONSTRUÇÃO</h2>
+					<h2>FERAS DA CONSTRUÇÃO</h2>
 				</div>
 			</div><!-- end of logo -->
 			<div id="topmenu">
 				<div id="nav">
 				  <ul id="menu" class="lavaLamp">
 					<li class="current_page_item"><a href="index.php">Início</a></li>
-					<li class="page_item page-item-2357"><a href="portal.html">O Portal</a></li>
-					<li class="page_item page-item-2355"><a href="cadastro.html">Cadastre-se</a></li>
-					<li class="page_item page-item-2355"><a href="contato.html">Contato</a></li>
+					<li class="page_item page-item-2357"><a href="portal.php">O Portal</a></li>
+					<li class="page_item page-item-2355"><a href="formcadastro.php">Cadastre-se</a></li>
+					<li class="page_item page-item-2355"><a href="formcontato.php">Contato</a></li>
 					<li class="page_item page-item-7"><a href="logout.php">Logoff</a></li>	
 
 					<div id="boxes">
@@ -421,7 +427,7 @@
 							<fieldset>
 								
 								<label for="senhaantiga">Senha atual:</label>
-								<input class="inputcadastro input-help" type="password" size="25" name="senhaantiga" id="senhaantiga" value="" tabindex="12" onBlur="validarSenhaAntiga()" required/>
+								<input class="inputcadastro input-help" type="password" size="25" name="senhaantiga" id="senhaantiga" value="" tabindex="18" onBlur="validarSenhaAntiga(<?php echo $id_;?>); " required/>
 								<span class="hint">Informe a sua senha atual</span><br /><br />
 								
 								<label for="senhanova">Nova senha:</label>
@@ -480,14 +486,14 @@
 					<div class="footleft">
 						<h3>Copyright &amp; Usage
 </h3>
-						<p>O conteúdo deste site é protegido por Portal da Construção, sendo proibido publicar nossas informações em outro meio sem autorização prévia.
+						<p>O conteúdo deste site é protegido por Feras da Construção, sendo proibido publicar nossas informações em outro meio sem autorização prévia.
 </p>
-						<p>Copyright &copy; 2013. Portal da Construção</p>
+						<p>Copyright &copy; 2013. Feras da Construção</p>
 					</div><!-- end of footleft -->
 					<div class="footleft">
 						<h3>Advertise here
 </h3>
-						<p>O Portal da Construção não se responsabiliza pelas informações fornecidas pelos profissionais cadastrados.
+						<p>O Portal Feras da Construção não se responsabiliza pelas informações fornecidas pelos profissionais cadastrados.
 							<!--<a href="#/">contact us
 							</a>.--></p>
 					</div><!-- end of footleft -->

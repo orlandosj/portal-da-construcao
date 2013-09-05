@@ -22,6 +22,9 @@ require_once "conexao.php";
 	echo "<script>document.updatesenha.senhaantiga.focus();</script>";	
 	echo "<script>document.updatesenha.senhaantiga.select();</script>";		
  }
- 
+ else{
+	echo '<script>document.getElementById("senhanova").disabled = false;</script>';
+	echo "<script>document.updatesenha.senhanova.focus();</script>";
+}	
   
 ?>

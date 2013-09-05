@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
 
-	<title>Portal da Construção</title>
+	<title>Feras da Construção</title>
 	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 	
 	<link media="screen" type="text/css" href="css/style.css" rel="stylesheet">
@@ -85,16 +85,16 @@
 	<script charset="utf-8" src="scripts/slider.js" type="text/javascript"></script>
 
 <?php
-/*Selects de comentários e dicas*/
+/*Selects de comentários, dicas e imagens de anunciantes*/
 require_once "conexao.php";
 	
 	conectar();
 		
-	$limite = 2; // Define o limite de registros a serem exibidos com o valor cinco
+	$limite = 4; // Define o limite de registros a serem exibidos com o valor cinco
 	
-	$consulta = "SELECT * FROM comentarios WHERE status = 0 ORDER BY id DESC LIMIT 0,2";
+	$consulta = "SELECT * FROM comentarios WHERE status = 1 ORDER BY id DESC LIMIT 0,4";
 	
-	$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução da consulta!\");</script>");
+	$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na exibição dos comentários!\");</script>");
 	
 	$consulta_total = mysql_query("SELECT id FROM comentarios"); // Seleciona o campo id da nossa tabela produtos
 	// Captura o número do total de registros no nosso banco a partir da nossa consulta
@@ -102,11 +102,17 @@ require_once "conexao.php";
 
 	$consulta_dicas = "SELECT * FROM dicas JOIN profissionais ON dicas.id_profissional = profissionais.id ORDER BY dicas.id DESC LIMIT 0,2";
 	
-	$resultado_dicas = mysql_query($consulta_dicas) or die("<script language=JavaScript>alert(\"Falha na execução da consulta!\");</script>");
+	$resultado_dicas = mysql_query($consulta_dicas) or die("<script language=JavaScript>alert(\"Falha na exibição das dicas!\");</script>");
 	
 	$consulta_total_dicas = mysql_query("SELECT id FROM dicas"); // Seleciona o campo id da nossa tabela produtos
 	// Captura o número do total de registros no nosso banco a partir da nossa consulta
-	$total_dicas = mysql_num_rows($consulta_total_dicas);	
+	$total_dicas = mysql_num_rows($consulta_total_dicas);
+
+	/*** Imagens de anunciantes ***/
+	
+	$result=mysql_query("SELECT id, url, imagem, tipo FROM anunciantes WHERE status = 1") or die("<script language=JavaScript>alert(\"Falha na exibição das imagens dos anunciantes!\");</script>"); 
+	
+		/*** End of imagens de anunciantes ***/
 ?>
 	
 <body class="home blog" data-twttr-rendered="true">
@@ -118,16 +124,16 @@ require_once "conexao.php";
 		<div id="top">
 			<div id="logo">
 				<div id="pad_logo">
-					<h2>PORTAL DA CONSTRUÇÃO</h2>
+					<h2>FERAS DA CONSTRUÇÃO</h2>
 				</div>
 			</div><!-- end of logo -->
 			<div id="topmenu">
 				<div id="nav">
 				  <ul id="menu" class="lavaLamp">
 					<li class="current_page_item"><a href="index.php">Início</a></li>
-					<li class="page_item page-item-2357"><a href="portal.html">O Portal</a></li>
-					<li class="page_item page-item-2355"><a href="cadastro.html">Cadastre-se</a></li>
-					<li class="page_item page-item-2355"><a href="contato.html">Contato</a></li>
+					<li class="page_item page-item-2357"><a href="portal.php">O Portal</a></li>
+					<li class="page_item page-item-2355"><a href="formcadastro.php">Cadastre-se</a></li>
+					<li class="page_item page-item-2355"><a href="formcontato.php">Contato</a></li>
 					<li class="page_item page-item-7"><a href="#dialog" name="modal">Login</a></li>	
 
 					<div id="boxes">
@@ -213,44 +219,44 @@ require_once "conexao.php";
 	<div id="padding_content">
 		<div class="clearfix" id="topcontent">
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/arquiteto.jpg">
-			<h3><a href="profissionais.php">Arquitetos e Engenheiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Arquiteto">Arquitetos e Engenheiros</a></h3>
 			<p>Escolha o profissional para projetar sua casa</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/pedreiro.jpg">
-			<h3><a href="#">Pedreiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Pedreiro">Pedreiros</a></h3>
 			<p>Escolha o profissional para executar sua obra</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/carpinteiro.jpg">
-			<h3><a href="#">Carpinteiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Carpinteiro">Carpinteiros</a></h3>
 			<p>Escolha o profissional para fazer seu telhado</p>
 			</div>
 			<div class="linetop"></div>			
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/eletricista.jpg">
-			<h3><a href="#">Eletricistas</a></h3>
+			<h3><a href="profissionais.php?profissao=Eletricista">Eletricistas</a></h3>
 			<p>Escolha o profissional para realizar seu projeto elétrico</p>
 			</div>		
 			
 			<div><img alt="" src="images/prof/separador2.png"> </div>
 			
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/encanador.jpg">
-			<h3><a href="#">Encanadores</a></h3>
+			<h3><a href="profissionais.php?profissao=Encanador">Encanadores</a></h3>
 			<p>Escolha o profissional para cuidar da parte hidráulica</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/serralheiro.jpg">
-			<h3><a href="#">Serralheiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Serralheiro">Serralheiros</a></h3>
 			<p>Escolha o profissional para fazer portões, janelas, etc</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/pintor.jpg">
-			<h3><a href="#">Pintores</a></h3>
+			<h3><a href="profissionais.php?profissao=Pintor">Pintores</a></h3>
 			<p>Escolha o profissional para pintar sua casa</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/paisagista.jpg">
-			<h3><a href="#">Paisagistas</a></h3>
+			<h3><a href="profissionais.php?profissao=Paisagista">Paisagistas</a></h3>
 			<p>Escolha o profissional para fazer seu jardim</p>
 			</div>			
 		</div><!-- end of topcontent -->
@@ -270,12 +276,13 @@ require_once "conexao.php";
 					
 					<div class="anuncio" id="anuncio">
 						 <div class="box-02">
-							<a href="cadastro.html">
+							<a href="formcadastro.php">
 							  <div class="box-anuncio" id="texto_anuncio">
 									<img src="images/cadastre-se2.jpg"><br></br>
-								   Não perca tempo!!! Anuncie seus serviços no Portal da Construção!!!<p></p>
-								   Você paga apenas R$20,00 por mês!!! É muito barato!!!<p></p>
-								   Clique aqui e faça seu cadastro agora mesmo!!!
+								   Não perca tempo!!! Anuncie seus serviços no Portal Feras da Construção!!!<p></p>
+								   Você paga apenas R$60,00 por 6 meses ou R$100,00 por 1 ano de anúncio!!! É muito barato!!!<p></p>
+								   Clique aqui e faça seu cadastro agora mesmo!!! <p></p>
+								   <b>Os 100 primeiros profissionais cadastrados concorrerão a 2 anos de divulgação grátis!!!</b>
 							  </div>							  
 							</a>
 						 </div>
@@ -283,8 +290,9 @@ require_once "conexao.php";
 					
 					<br></br>
 					
-					<!--DICAS-->					
-					<h2>Dicas de especialistas</h2>
+					<!--DICAS-->
+					<div class="boxdica">
+					<h2>Dicas de especialistas para facilitar sua obra</h2><p></p>
 					
 					<?php
 						if($total_dicas > 0):
@@ -298,16 +306,19 @@ require_once "conexao.php";
 						<div class="dica">
 							<div class="box-02">
 							  <div class="box-03">
-									<?php echo $nome ." - ". $profissao;?> <br></br> 
+									<?php echo $nome ." - ". $profissao;?> <p></p> 
 									<?php echo $dica;?>
 							  </div>
 							</div>
 						</div>
-						<br></br>
+						<p></p>
 					<?php 
 						endwhile;
-						if($total_dicas > 2):
 					?>
+						<h4><a href="#dialog" name="modal">Clique aqui para fazer login e dar uma dica.</a></h4><br></br>
+					<?php
+						if($total_dicas > $limite):
+					?>					
 						<h4><a href="listadicas.php">Veja outras dicas</a></h4>						
 					<?php
 						endif;
@@ -318,17 +329,13 @@ require_once "conexao.php";
 							</div>
 							<br></br>							
 					<?php endif; ?>
+					</div>
 					<br></br>				
 					
-					<p> 
-					
-					</p>
-					<p> 
-					
-					</p>
 					<!--END OF DICAS-->
 					
 					<!--COMENTÁRIOS-->
+					<div class="boxdica">
 					<h2>Comentários</h2>
 					<p> </p>
 					
@@ -346,14 +353,14 @@ require_once "conexao.php";
 								<?php echo $comentario;?>
 							  </div>
 							</div>
-						</div><br></br>
+						</div><p></p>
 					<?php 
 						endwhile;
-						if($total_registros > 2):
+						if($total_registros > $limite):
 					?>
 						<h4><a href="listacomentarios.php">Ver todos os comentários</a></h4>
 					<?php endif;?>
-						<h4><a href="comentarios.html">Clique aqui para fazer um comentário</a></h4>
+						<h4><a href="formcomentarios.php">Clique aqui para fazer um comentário</a></h4>
 					<?php
 						else:
 					?>
@@ -361,13 +368,11 @@ require_once "conexao.php";
 								Nenhum comentário cadastrado. Seja o primeiro a comentar.
 							</div>
 							<br></br>	
-							<h4><a href="comentarios.html">Clique aqui para fazer um comentário</a></h4>
+							<h4><a href="formcomentarios.php">Clique aqui para fazer um comentário</a></h4>
 					<?php endif;?>
+					</div>
 					<br></br>	
 					
-					<p> 
-
-					</p>
 					<!--END OF COMENTÁRIOS-->			
 
 				</div><!-- end of maintext -->
@@ -382,19 +387,38 @@ require_once "conexao.php";
 						</div>-->
 						<div id="anuncios" class="sidetext">
 									<h2>Parceiros</h2>
+									
 									<ul class="advertisers clearfix">
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>																				
+									<?php
+										if($result):
+											while ($campo = mysql_fetch_assoc($result)):
+												$id   = $campo["id"]; 
+												$foto = $campo["imagem"];
+												$tipo = $campo["tipo"];
+												$url = $campo["url"];
+												//print $foto;
+												if($url != null):
+									?>			
+												<li><a href="<?php echo $url;?>"><img class="imgleft" alt="" src="<?php echo "visualiza_imagem_foto.php?id=".$id;?>" width="145px" height="145px"></a></li>
+												
+									<?php		else:?>			
+												<li><img class="imgleft" alt="" src="<?php echo "visualiza_imagem_foto.php?id=".$id;?>" width="145px" height="145px"></li>
+												
+									<?php		endif;
+											endwhile;  
+										endif; 
+									?>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>																				
 									</ul>
-								</div><!-- end of sidetext -->
+						</div><!-- end of sidetext -->
 					</div>
 				</div><!-- end of sidebox -->
 			</div><!-- end of side -->
@@ -414,14 +438,14 @@ require_once "conexao.php";
 					<div class="footleft">
 						<h3>Copyright &amp; Usage
 </h3>
-						<p>O conteúdo deste site é protegido por Portal da Construção, sendo proibido publicar nossas informações em outro meio sem autorização prévia.
+						<p>O conteúdo deste site é protegido por Feras da Construção, sendo proibido publicar nossas informações em outro meio sem autorização prévia.
 </p>
-						<p>Copyright &copy; 2013. Portal da Construção</p>
+						<p>Copyright &copy; 2013. Feras da Construção</p>
 					</div><!-- end of footleft -->
 					<div class="footleft">
 						<h3>Advertise here
 </h3>
-						<p>O Portal da Construção não se responsabiliza pelas informações fornecidas pelos profissionais cadastrados.
+						<p>O Portal Feras da Construção não se responsabiliza pelas informações fornecidas pelos profissionais cadastrados.
 							<!--<a href="#/">contact us
 							</a>.--></p>
 					</div><!-- end of footleft -->

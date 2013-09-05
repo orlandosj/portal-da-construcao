@@ -14,6 +14,8 @@
 	<script src="scripts/js.js" type="text/javascript"></script>
 	<script src="scripts/jquery.cycle.all.js" type="text/javascript"></script>
 	
+	<script src="scripts/combo.js"></script>	
+	
 	<script src="scripts/jquery-1.9.0.min.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="scripts/coin-slider-styles.css" type="text/css" />
 	
@@ -26,13 +28,6 @@
 	});
 	</script>
 	
-	<script type="text/javascript">  
-		jQuery.noConflict(); 
-		jQuery(function($){ 
-			$("#telefone").mask("(99) 9999-9999");
-			$("#usuario").mask("999.999.999-99");
-		}); 
-	</script>
 	
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -136,6 +131,80 @@
 	
 	<script charset="utf-8" src="scripts/slider.js" type="text/javascript"></script>
 	
+<?php
+/*Página para CRUD de comentários*/
+require_once "conexao.php";
+	
+	conectar();
+		
+	$limite = 5; // Define o limite de registros a serem exibidos com o valor cinco
+	
+	// Captura os dados da variável 'pag' vindo da url, onde contém o número da página atual
+	$pagina = ( isset( $_GET['pag'] ) ? $_GET['pag'] : null);
+		
+	/* Se a variável $pagina não contém nenhum valor,
+	então por padrão ela será posta com o valor 1 (primeira página) */
+	if(!$pagina)
+	{
+		$pagina = 1;
+	}
+	
+	/* Operação matemática que resulta no registro inicial
+	a ser selecionado no banco de dados baseado na página atual */
+	$inicio = ($pagina * $limite) - $limite;
+	
+	if(isset($_GET["profissao"]))
+		$profissao = $_GET["profissao"];
+	else
+		$profissao = "";
+	
+	if($profissao == "Arquiteto")	
+		$consulta = "SELECT * FROM profissionais WHERE status = 1 AND (profissao = 'Arquiteto' OR profissao = 'Engenheiro') ORDER BY nome LIMIT $inicio,$limite";
+	else
+		$consulta = "SELECT * FROM profissionais WHERE status = 1 AND profissao = '$profissao' ORDER BY nome LIMIT $inicio,$limite";
+	
+	
+	$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução da consulta!\");location = 'index.php';</script>");
+	$resultado2 = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução da consulta!\");location = 'index.php';</script>");
+	
+	$consulta_total = mysql_query($consulta); // Seleciona o campo id da nossa tabela produtos
+	// Captura o número do total de registros no nosso banco a partir da nossa consulta
+	$total_registros = mysql_num_rows($consulta_total);
+	
+	/* Define o total de páginas a serem mostradas baseada
+	na divisão do total de registros pelo limite de registros a serem mostrados */
+	if($total_registros > 0)
+		$total_paginas = Ceil($total_registros / $limite);
+	else
+		$total_paginas = 0;
+		
+	if(isset($_POST["filtrar"])){
+		$cidade = $_POST["cidade"];
+		
+		if($cidade != "Todas"){
+			if($profissao == "Arquiteto")	
+				$consulta = "SELECT * FROM profissionais WHERE cidade = '$cidade' AND status = 1 AND (profissao = 'Arquiteto' OR profissao = 'Engenheiro') ORDER BY nome LIMIT $inicio,$limite";
+			else
+				$consulta = "SELECT * FROM profissionais WHERE cidade = '$cidade' AND status = 1 AND profissao = '$profissao' ORDER BY nome LIMIT $inicio,$limite";
+		
+		
+			$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução da consulta!\");location = 'index.php';</script>");
+			//$resultado2 = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução da consulta!\");location = 'index.php';</script>");
+			
+			$consulta_total = mysql_query($consulta); // Seleciona o campo id da nossa tabela produtos
+			// Captura o número do total de registros no nosso banco a partir da nossa consulta
+			$total_registros = mysql_num_rows($consulta_total);
+			
+			/* Define o total de páginas a serem mostradas baseada
+			na divisão do total de registros pelo limite de registros a serem mostrados */
+			if($total_registros > 0)
+				$total_paginas = Ceil($total_registros / $limite);
+			else
+				$total_paginas = 0;			
+		}
+	}
+?>
+	
 	
 
 <body class="home blog" data-twttr-rendered="true">
@@ -147,16 +216,16 @@
 		<div id="top">
 			<div id="logo">
 				<div id="pad_logo">
-					<h2>PORTAL DA CONSTRUÇÃO</h2>
+					<h2>FERAS DA CONSTRUÇÃO</h2>
 				</div>
 			</div><!-- end of logo -->
 			<div id="topmenu">
 				<div id="nav">
 				  <ul id="menu" class="lavaLamp">
 					<li class="current_page_item"><a href="index.php">Início</a></li>
-					<li class="page_item page-item-2357"><a href="portal.html">O Portal</a></li>
-					<li class="page_item page-item-2355"><a href="cadastro.html">Cadastre-se</a></li>
-					<li class="page_item page-item-2355"><a href="contato.html">Contato</a></li>
+					<li class="page_item page-item-2357"><a href="portal.php">O Portal</a></li>
+					<li class="page_item page-item-2355"><a href="formcadastro.php">Cadastre-se</a></li>
+					<li class="page_item page-item-2355"><a href="formcontato.php">Contato</a></li>
 					<li class="page_item page-item-7"><a href="#dialog" name="modal">Login</a></li>	
 
 					<div id="boxes">
@@ -240,91 +309,242 @@
 <!-- BEGIN CONTENT -->
 	<div class="clearfix" id="content">
 		<div id="padding_content">
-			<div class="clearfix" id="topcontent">
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/arquiteto.jpg">
-			<h3><a href="profissionais.php">Arquitetos e Engenheiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Arquiteto">Arquitetos e Engenheiros</a></h3>
 			<p>Escolha o profissional para projetar sua casa</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/pedreiro.jpg">
-			<h3><a href="#">Pedreiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Pedreiro">Pedreiros</a></h3>
 			<p>Escolha o profissional para executar sua obra</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/carpinteiro.jpg">
-			<h3><a href="#">Carpinteiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Carpinteiro">Carpinteiros</a></h3>
 			<p>Escolha o profissional para fazer seu telhado</p>
 			</div>
 			<div class="linetop"></div>			
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/eletricista.jpg">
-			<h3><a href="#">Eletricistas</a></h3>
+			<h3><a href="profissionais.php?profissao=Eletricista">Eletricistas</a></h3>
 			<p>Escolha o profissional para realizar seu projeto elétrico</p>
 			</div>		
 			
 			<div><img alt="" src="images/prof/separador2.png"> </div>
 			
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/encanador.jpg">
-			<h3><a href="#">Encanadores</a></h3>
+			<h3><a href="profissionais.php?profissao=Encanador">Encanadores</a></h3>
 			<p>Escolha o profissional para cuidar da parte hidráulica</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/serralheiro.jpg">
-			<h3><a href="#">Serralheiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Serralheiro">Serralheiros</a></h3>
 			<p>Escolha o profissional para fazer portões, janelas, etc</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/pintor.jpg">
-			<h3><a href="#">Pintores</a></h3>
+			<h3><a href="profissionais.php?profissao=Pintor">Pintores</a></h3>
 			<p>Escolha o profissional para pintar sua casa</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/paisagista.jpg">
-			<h3><a href="#">Paisagistas</a></h3>
+			<h3><a href="profissionais.php?profissao=Paisagista">Paisagistas</a></h3>
 			<p>Escolha o profissional para fazer seu jardim</p>
 			</div>			
 		</div><!-- end of topcontent -->
 		
 			<div id="maincontent">
-				<?php for($i=1; $i < 3;$i++):?>
-				<div id="profissional1" class="profissional">
-					<div id="slideshow" class="flexslider site-slideshow">
-						<ul class="slides">
-							<li>
-								<img src="images/semfoto.jpg" alt="Imagem Slide">
-								<p class="flex-caption">Imagem 1</p>
-							</li>
-							<li>
-								<img src="images/img/esboco_interno.jpg" alt="Imagem Slide">
-								<p class="flex-caption">Imagem 2</p>
-							</li>
-							<li>
-								<img src="images/img/projeto_casa.jpg" alt="Imagem Slide">
-								<p class="flex-caption">Imagem 3</p>
-							</li>
-							<li>
-								<img src="images/img/esboco_interno.jpg" alt="Imagem Slide">
-								<p class="flex-caption">Imagem 4</p>
-							</li>
-							<li>
-								<img src="images/img/projeto_casa.jpg" alt="Imagem Slide">
-								<p class="flex-caption">Imagem 5</p>
-							</li>
-						</ul>
+				<div class="boxprof">
+				<div id="respond">
+						<div id="contactFormArea" >
+							<form action="" method="post" id="pesquisa" name="pesquisa" >
+								<fieldset>
+									
+									<select required aria-required="true" class="oculto" name="estado" id="estado" tabindex="9"> 																																			
+									</select>
+									
+									<div align="center">
+									Cidade:
+									<select required aria-required="true"  class="dropdownlist" name="cidade" id="cidade" tabindex="10"> 
+										<option>Todas</option>
+										<?php while($linha2 = mysql_fetch_assoc($resultado2)):?>
+											<option value="<?php echo $linha2["cidade"];?>"><?php echo $linha2["cidade"];?></option>
+										<?php endwhile;?>
+									</select>
+									<span class="hint">Para filtrar a pesquisa selecione a cidade para a qual procura o profissional</span>
+									
+									<input class="button"  type="submit" name="filtrar" id="button" value="Filtrar" tabindex="13" />										
+									</div>
+									<br></br>															
+									<br></br>										
+								</fieldset>
+							</form>
+						</div>
 					</div>
 					
-				
-					<div class="info-profissionais">
-						<b>Nome:</b> Orlando Silva Junior<p></p>
-						<b>Profissão:</b> Engenheiro<p></p>
-						<b>Telefone:</b> 99694317<p></p>
-						<b>Email:</b> orlandosj@gmail.com<p></p>
-						<b>Serviços realizados:</b> Projeto, Cálculo estrutural, dsfsdfsdfds fdsfsdfsdfsd fsdfsdfsdfs dfsdfsdfsd<p></p>
-						<b>Informações adicionais:</b> Trabalho nas cidades de Matozinhos, Pedro Leopoldo e Sete Lagoas<p></p>
-					</div>
-				</div>
-				
-				<br></br><br></br>
-				<?php endfor;?>	
+				<?php
+						if($total_registros > 0):
+							while($linha = mysql_fetch_assoc($resultado)):
+								$nome = $linha['nome'];
+								$profissao = $linha['profissao'];
+								//if($profissao == "Engenheiro" || $profissao == "Arquiteto")
+									//$profissao.="(a)";
+								$city = $linha['cidade'];
+								$telefone = $linha['telefone'];	
+								$telefone2 = $linha['telefone_alternativo'];
+								$email = $linha['email'];
+								$servicos = $linha['servicos'];
+								$informacoes = $linha['informacoes'];
+					?>
+						<div class="info-profissionais">
+							<b>Nome:</b> <?php echo $nome;  
+							echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+							?>
+							<b>Profissao:</b> <?php echo $profissao;
+							if($profissao == "Arquiteto" || $profissao == "Engenheiro"){
+								echo "(a)";
+								echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+							}
+							?>
+							<b>Cidade:</b> <?php echo $city;?>
+							<p></p>
+							<b>Telefone(s):</b> 
+							<?php echo $telefone;
+								if($telefone2 != null)
+									echo " - $telefone2 ";
+								echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+							?> 
+							<b>Email:</b> <?php echo $email ?><p></p>
+							<b>Serviços realizados:</b> <?php echo $servicos ?><p></p>
+							<?php if($informacoes != null):?>
+							<b>Informações adicionais:</b> <?php echo $informacoes; endif;?>
+						</div>
+							
+						<div> <?php echo "&nbsp;"; ?></div>
+						
+					<?php 
+						endwhile;
+						endif;
+						$ant = $pagina - 1;						
+						$prox = $pagina + 1;												
+						$ultima_pag = $total_paginas;
+						$penultima = $ultima_pag - 1;  
+						$adjacentes = 2;
+					?>
+					
+					
+						<?php
+							if($total_paginas > 1):
+						?>
+					<!-- PAGINAÇÃO -->
+					<nav class="site-pagination">
+						<?php
+								if($total_paginas <= 5){
+									if($total_paginas > 1 && $pagina > 1){
+										echo '<a href="profissinais.php?pag=1" > Primeira </a>';
+									}
+									
+									if($pagina > 1){
+										echo '<a href="profissinais.php?pag='.$ant.'" class="prev" > <img src="images/pag-ant.png"> </a>';
+									}
+									for($i=1; $i <= $total_paginas; $i++){
+										if($i == $pagina)
+											echo '<a href="profissinais.php?pag='.$i.'" class= "active" > '.$i.'</a>';
+										else
+											echo '<a href="profissinais.php?pag='.$i.'"> '.$i.'</a>';								
+									} 
+									if($pagina < $ultima_pag && $ultima_pag > 2){
+										echo '<a href="profissinais.php?pag='.$prox.'" class="next" > <img src="images/pag-prox.png"> </a>';
+									}
+									
+									if($total_paginas > 1 && $pagina < $ultima_pag){
+										echo '<a href="profissinais.php?pag='.$ultima_pag.'" > Última </a>';
+									}
+								}
+								else{
+									if ($pagina < 1 + (2 * $adjacentes)){
+										if($pagina > 1){
+											echo '<a href="profissinais.php?pag=1" > Primeira </a>';
+											echo '<a href="profissinais.php?pag='.$ant.'" class="prev" > <img src="images/pag-ant.png"> </a>';
+										}
+										
+										for($i=1; $i < 2 + (2 * $adjacentes); $i++){
+											if($i == $pagina)
+												echo '<a href="profissinais.php?pag='.$i.'" class= "active" > '.$i.'</a>';
+											else
+												echo '<a href="profissinais.php?pag='.$i.'"> '.$i.'</a>';									
+										}
+										echo '...';
+										if($pagina < $ultima_pag){
+											echo '<a href="profissinais.php?pag='.$prox.'" class="next" > <img src="images/pag-prox.png"> </a>';
+											echo '<a href="profissinais.php?pag='.$ultima_pag.'" > Última </a>';
+										}
+									}								
+									else if($pagina > (2 * $adjacentes) && $total_paginas < 8){
+										echo '<a href="profissinais.php?pag=1" > Primeira </a>';
+										echo '<a href="profissinais.php?pag='.$ant.'" class="prev" > <img src="images/pag-ant.png"> </a>';
+										echo '...';
+										for($i = $pagina-$adjacentes; $i<= $total_paginas; $i++){
+											if($i == $pagina)
+												echo '<a href="profissinais.php?pag='.$i.'" class= "active" > '.$i.'</a>';
+											else
+												echo '<a href="profissinais.php?pag='.$i.'"> '.$i.'</a>';									
+										}
+										if($pagina < $ultima_pag){
+											echo '<a href="profissinais.php?pag='.$prox.'" class="next" > <img src="images/pag-prox.png"> </a>';
+											echo '<a href="profissinais.php?pag='.$ultima_pag.'" > Última </a>';
+										}
+									}
+									else if($pagina > (2 * $adjacentes) && $pagina < $ultima_pag - 3){
+										echo '<a href="profissinais.php?pag=1" > Primeira </a>';
+										echo '<a href="profissinais.php?pag='.$ant.'" class="prev" > <img src="images/pag-ant.png"> </a>';
+										echo '...';
+										for($i = $pagina-$adjacentes; $i<= $pagina + $adjacentes; $i++){
+											if($i == $pagina)
+												echo '<a href="profissinais.php?pag='.$i.'" class= "active" > '.$i.'</a>';
+											else
+												echo '<a href="profissinais.php?pag='.$i.'"> '.$i.'</a>';									
+										}
+										echo '...';
+										echo '<a href="profissinais.php?pag='.$prox.'" class="next" > <img src="images/pag-prox.png"> </a>';
+										echo '<a href="profissinais.php?pag='.$ultima_pag.'" > Última </a>';
+									}
+									else{
+										echo '<a href="profissinais.php?pag=1" > Primeira </a>';
+										echo '<a href="profissinais.php?pag='.$ant.'" class="prev" > <img src="images/pag-ant.png"> </a>';
+										echo '...';
+										for ($i = $pagina - $adjacentes; $i <= $ultima_pag; $i++){
+											if($i == $pagina)
+												echo '<a href="profissinais.php?pag='.$i.'" class= "active" > '.$i.'</a>';
+											else
+												echo '<a href="profissinais.php?pag='.$i.'"> '.$i.'</a>';
+										}
+										if($pagina < $ultima_pag){
+											echo '<a href="profissinais.php?pag='.$prox.'" class="next" > <img src="images/pag-prox.png"> </a>';
+											echo '<a href="profissinais.php?pag='.$ultima_pag.'" > Última </a>';
+										}
+									}							
+								}
+							?>
+					</nav> <br></br>
+					<!-- END OF PAGINAÇÃO -->
+					
+					<?php
+							endif;
+							if($total_registros == 0):
+								?>
+								<div id="portal">
+									<?php if($profissao == "Engenheiro" || $profissao == "Arquiteto"):?>
+										Nenhum arquiteto ou engenheiro cadastrado;
+									<?php else:?>
+										Nenhum <?php echo strtolower($profissao)?> cadastrado.
+									<?php endif;?>
+								</div>
+								
+							<?php endif; ?>						
+					
+					<br></br>
+					<h4><a href="index.php">Voltar à página principal</a></h4>
+				</div>	
 				<div id="side">
 					<div class="sidebox">
 						<div class="c_bottomsidebox">
@@ -367,14 +587,14 @@
 					<div class="footleft">
 						<h3>Copyright &amp; Usage
 </h3>
-						<p>O conteúdo deste site é protegido por Portal da Construção, sendo proibido publicar nossas informações em outro meio sem autorização prévia.
+						<p>O conteúdo deste site é protegido por Feras da Construção, sendo proibido publicar nossas informações em outro meio sem autorização prévia.
 </p>
-						<p>Copyright &copy; 2013. Portal da Construção</p>
+						<p>Copyright &copy; 2013. Feras da Construção</p>
 					</div><!-- end of footleft -->
 					<div class="footleft">
 						<h3>Advertise here
 </h3>
-						<p>O Portal da Construção não se responsabiliza pelas informações fornecidas pelos profissionais cadastrados.
+						<p>O Portal Feras da Construção não se responsabiliza pelas informações fornecidas pelos profissionais cadastrados.
 							<!--<a href="#/">contact us
 							</a>.--></p>
 					</div><!-- end of footleft -->

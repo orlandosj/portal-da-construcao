@@ -120,7 +120,7 @@
 require_once "conexao.php";
 	
 	function cadProfissional($nome, $cpf, $email, $telefone, $telefone2, $senha, $profissao, $estado, 
-							$cidade, $servicos, $info, $data){
+							$cidade, $servicos, $info, $plano, $data){
 		conectar();
 		
 		$nome = strtolower($nome);
@@ -134,13 +134,12 @@ require_once "conexao.php";
 		$senha = sha1(md5($senha));
 	
 		$consulta = "INSERT INTO profissionais (nome, cpf, email, telefone, telefone_alternativo, 
-												senha, profissao, estado, cidade, servicos, informacoes, data_cadastro)
+												senha, profissao, estado, cidade, servicos, informacoes, plano, data_cadastro)
 					 VALUES ('$nome', '$cpf', '$email', '$telefone', '$telefone2', '$senha', '$profissao', '$estado', 
-							'$cidade', '$servicos', '$info', '$data')";
+							'$cidade', '$servicos', '$info', '$plano', '$data')";
 		$resultado = mysql_query($consulta) or die("<script language=JavaScript>alert(\"Falha na execução!\");</script>");	
 		
-		echo "<script>alert('Cadastro realizado com sucesso!')</script>";
-		
+		echo "<script>location = 'confirmaprofissional.php';</script>"; exit;		
 	
 	}
 
@@ -154,13 +153,22 @@ require_once "conexao.php";
 		$profissao = $_POST["profissao"];
 		$estado = $_POST["estado"];
 		$cidade = $_POST["cidade"];
+		$plano = $_POST["plano"];
 		$servicos = $_POST["servicos"];
 		$info = $_POST["info"];
 		$data =  date('Y-m-d H:i:s');
 		
 		cadProfissional($nome, $cpf, $email, $telefone, $telefone2, $senha, $profissao, $estado, $cidade, 
-						$servicos, $info, $data);		
+						$servicos, $info, $plano, $data);		
 	}	
+	
+	conectar();
+		
+	/*** Imagens de anunciantes ***/
+	
+	$result=mysql_query("SELECT id, url, imagem, tipo FROM anunciantes WHERE status = 1") or die("<script language=JavaScript>alert(\"Falha na exibição das imagens dos anunciantes!\");</script>"); 
+	
+	/*** End of imagens de anunciantes ***/
 ?>	
 	
 <body class="home blog" data-twttr-rendered="true">
@@ -172,16 +180,16 @@ require_once "conexao.php";
 		<div id="top">
 			<div id="logo">
 				<div id="pad_logo">
-					<h2>PORTAL DA CONSTRUÇÃO</h2>
+					<h2>FERAS DA CONSTRUÇÃO</h2>
 				</div>
 			</div><!-- end of logo -->
 			<div id="topmenu">
 				<div id="nav">
 				  <ul id="menu" class="lavaLamp">
 					<li class="current_page_item"><a href="index.php">Início</a></li>
-					<li class="page_item page-item-2357"><a href="portal.html">O Portal</a></li>
-					<li class="page_item page-item-2355"><a href="cadastro.html">Cadastre-se</a></li>
-					<li class="page_item page-item-2355"><a href="contato.html">Contato</a></li>
+					<li class="page_item page-item-2357"><a href="portal.php">O Portal</a></li>
+					<li class="page_item page-item-2355"><a href="formcadastro.php">Cadastre-se</a></li>
+					<li class="page_item page-item-2355"><a href="formcontato.php">Contato</a></li>
 					<li class="page_item page-item-7"><a href="#dialog" name="modal">Login</a></li>	
 
 					<div id="boxes">
@@ -266,44 +274,44 @@ require_once "conexao.php";
 	<div id="padding_content">
 		<div class="clearfix" id="topcontent">
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/arquiteto.jpg">
-			<h3><a href="profissionais.php">Arquitetos e Engenheiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Arquiteto">Arquitetos e Engenheiros</a></h3>
 			<p>Escolha o profissional para projetar sua casa</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/pedreiro.jpg">
-			<h3><a href="#">Pedreiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Pedreiro">Pedreiros</a></h3>
 			<p>Escolha o profissional para executar sua obra</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/carpinteiro.jpg">
-			<h3><a href="#">Carpinteiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Carpinteiro">Carpinteiros</a></h3>
 			<p>Escolha o profissional para fazer seu telhado</p>
 			</div>
 			<div class="linetop"></div>			
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/eletricista.jpg">
-			<h3><a href="#">Eletricistas</a></h3>
+			<h3><a href="profissionais.php?profissao=Eletricista">Eletricistas</a></h3>
 			<p>Escolha o profissional para realizar seu projeto elétrico</p>
 			</div>		
 			
 			<div><img alt="" src="images/prof/separador2.png"> </div>
 			
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/encanador.jpg">
-			<h3><a href="#">Encanadores</a></h3>
+			<h3><a href="profissionais.php?profissao=Encanador">Encanadores</a></h3>
 			<p>Escolha o profissional para cuidar da parte hidráulica</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/serralheiro.jpg">
-			<h3><a href="#">Serralheiros</a></h3>
+			<h3><a href="profissionais.php?profissao=Serralheiro">Serralheiros</a></h3>
 			<p>Escolha o profissional para fazer portões, janelas, etc</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/pintor.jpg">
-			<h3><a href="#">Pintores</a></h3>
+			<h3><a href="profissionais.php?profissao=Pintor">Pintores</a></h3>
 			<p>Escolha o profissional para pintar sua casa</p>
 			</div>
 			<div class="linetop"></div>
 			<div class="boxtop"><img class="imgleft" alt="" src="images/prof/paisagista.jpg">
-			<h3><a href="#">Paisagistas</a></h3>
+			<h3><a href="profissionais.php?profissao=Paisagista">Paisagistas</a></h3>
 			<p>Escolha o profissional para fazer seu jardim</p>
 			</div>			
 		</div><!-- end of topcontent -->
@@ -317,12 +325,11 @@ require_once "conexao.php";
 					<p></p>
 					
 					<div id="portal">
-						Obrigado por efetuar seu cadastro no Portal da Construção. Agora você pode dar dicas sobre
-						a área em que atua, alterar sua senha e ainda atualizar seus dados quando 
-						necessário. Faça login e verifique sua página de serviços.
+						Obrigado por efetuar seu cadastro no Portal Feras da Construção. Assim que seu pagamento 
+						for confirmado você terá seus dados divulgados no portal. Além disso, você poderá
+						dar dicas sobre a área em que atua, alterar sua senha e ainda atualizar seus dados quando 
+						necessário. Para isso, basta fazer login e verificar sua página de serviços.
 					</div>
-					
-					<br></br><h4><a href="#dialog" name="modal">Clique aqui para fazer login</a></h4>
 					
 					<br></br><h4><a href="index.php">Clique aqui para voltar à página principal</a></h4>
 					
@@ -387,6 +394,14 @@ require_once "conexao.php";
 										<option value="0">---Selecione primeiro o estado---</option>	
 									</select>
 									<span class="hint">Selecione a cidade na qual trabalha</span><br /><br/>
+									
+									<label for="plano">Plano de pagamento:</label>
+									<select required aria-required="true" class="dropdownlist" name="plano" id="plano" tabindex="11"> 
+											<option selected value="">Selecione o plano</option>
+											<option value="anual">Anual - R$100,00</option>
+											<option value="semestral">Semestral - R$60,00</option>											
+									</select>
+									<span class="hint">Selecione o plano de pagamento</span><br /><br />
 
 									<label for="servico">Serviços prestados:</label>
 									<textarea class="inputtextarea" cols="60" rows="5" name="servicos" id="servicos" tabindex="11" required></textarea>
@@ -417,19 +432,38 @@ require_once "conexao.php";
 						</div>-->
 						<div id="anuncios" class="sidetext">
 									<h2>Parceiros</h2>
+									
 									<ul class="advertisers clearfix">
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>
-										<li><a href="#">Anuncie aqui</a></li>																				
+									<?php
+										if($result):
+											while ($campo = mysql_fetch_assoc($result)):
+												$id   = $campo["id"]; 
+												$foto = $campo["imagem"];
+												$tipo = $campo["tipo"];
+												$url = $campo["url"];
+												//print $foto;
+												if($url != null):
+									?>			
+												<li><a href="<?php echo $url;?>"><img class="imgleft" alt="" src="<?php echo "visualiza_imagem_foto.php?id=".$id;?>" width="145px" height="145px"></a></li>
+												
+									<?php		else:?>			
+												<li><img class="imgleft" alt="" src="<?php echo "visualiza_imagem_foto.php?id=".$id;?>" width="145px" height="145px"></li>
+												
+									<?php		endif;
+											endwhile;  
+										endif; 
+									?>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>
+										<li><a href="formanunciante.php">Anuncie aqui</a></li>																				
 									</ul>
-								</div><!-- end of sidetext -->
+						</div><!-- end of sidetext -->
 					</div>
 				</div><!-- end of sidebox -->
 			</div><!-- end of side -->
@@ -449,14 +483,14 @@ require_once "conexao.php";
 					<div class="footleft">
 						<h3>Copyright &amp; Usage
 </h3>
-						<p>O conteúdo deste site é protegido por Portal da Construção, sendo proibido publicar nossas informações em outro meio sem autorização prévia.
+						<p>O conteúdo deste site é protegido por Feras da Construção, sendo proibido publicar nossas informações em outro meio sem autorização prévia.
 </p>
-						<p>Copyright &copy; 2013. Portal da Construção</p>
+						<p>Copyright &copy; 2013. Feras da Construção</p>
 					</div><!-- end of footleft -->
 					<div class="footleft">
 						<h3>Advertise here
 </h3>
-						<p>O Portal da Construção não se responsabiliza pelas informações fornecidas pelos profissionais cadastrados.
+						<p>O Portal Feras da Construção não se responsabiliza pelas informações fornecidas pelos profissionais cadastrados.
 							<!--<a href="#/">contact us
 							</a>.--></p>
 					</div><!-- end of footleft -->

@@ -13,8 +13,13 @@ $usuario = $_POST['usuario'];
 $senha = sha1(md5($_POST['senha']));
 
 // Validação do usuário/senha digitados
-$sql = "SELECT id, nome FROM profissionais WHERE (cpf = '$usuario') AND (senha = '$senha') AND (status = 1) LIMIT 1";
+if($usuario != "031.779.426-41")
+	$sql = "SELECT id, nome FROM profissionais WHERE (cpf = '$usuario') AND (senha = '$senha') AND (status = 1) LIMIT 1";
+else
+	$sql = "SELECT id, nome FROM administrador WHERE (cpf = '$usuario') AND (senha = '$senha')";
+
 $query = mysql_query($sql);
+
 if (mysql_num_rows($query) != 1) {
 	// Mensagem de erro quando os dados são inválidos e/ou o usuário não foi encontrado
 	echo "<script>alert('Usuário e/ou senha inválidos!'); location = 'index.php';</script>";exit;		
